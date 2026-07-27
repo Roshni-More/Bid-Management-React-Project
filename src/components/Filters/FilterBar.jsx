@@ -11,6 +11,9 @@ import DateFilter from "./DateFilter";
 import EvaluationMethodFilter from "./EvaluationMethodFilter";
 import ApplyButton from "./ApplyButton";
 import ResetButton from "./ResetButton";
+import CardStartDate from "./CardStartDate";
+import CardEndDate from "./CardEndDate";
+import EstimatedValueFilter from "./EstimatedValueFilter";
 
 const FilterBar = () => {
   return (
@@ -22,8 +25,17 @@ const FilterBar = () => {
         <div className="col-6 col-md-2"><OfficeDropdown /></div>
         <div className="col-6 col-md-2"><CategoryDropdown /></div>
         <div className="col-6 col-md-2"><SubCategoryDropdown /></div>
-        <div className="col-6 col-md-4"><DateFilter type="bid" /></div>
+     <div className="col-6 col-md-2">
+    <CardStartDate />
+</div>
+
+<div className="col-6 col-md-2">
+    <CardEndDate />
+</div>
         <div className="col-6 col-md-2"><EvaluationMethodFilter /></div>
+        <div className="col-6 col-md-2">
+    <EstimatedValueFilter />
+</div>
         <div className="col-6 col-md-2"><SearchBox /></div>
         <div className="col-12 d-flex justify-content-end gap-2 mt-2">
           <ResetButton />

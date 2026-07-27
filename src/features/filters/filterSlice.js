@@ -20,6 +20,8 @@ const initialSelected = {
   BidDateTo: undefined,
   ClosingDateFrom: undefined,
   ClosingDateTo: undefined,
+   CardStartDate: undefined,
+  CardEndDate: undefined,
   MinEstimatedValue: undefined,
   MaxEstimatedValue: undefined,
   MinEMD: undefined,
