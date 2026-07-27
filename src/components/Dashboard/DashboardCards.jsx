@@ -14,7 +14,7 @@ const DashboardCards = () => {
     { label: "Total Ministries", value: stats.totalMinistries },
     { label: "Total Departments", value: stats.totalDepartments },
     { label: "Total Organisations", value: stats.totalOrganisations },
-    { label: "Total Estimated Value", value: formatCurrency(stats.totalEstimatedValue) },
+    // { label: "Total Estimated Value", value: formatCurrency(stats.totalEstimatedValue) },
   ];
 
   return (
