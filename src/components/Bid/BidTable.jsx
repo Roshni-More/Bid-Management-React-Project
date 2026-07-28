@@ -44,7 +44,7 @@ const BidTable = () => {
     { header: "Category", accessor: (row) => row.itemCategory },
    
     { header: "Bid Date", accessor: (row) => formatDate(row.bidDate), sortKey: "BidDate" },
-    { header: "Closing Date", accessor: (row) => formatDateTime(row.bidEndDateTime), sortKey: "BidEndDateTime" },
+    // { header: "Closing Date", accessor: (row) => formatDateTime(row.bidEndDateTime), sortKey: "BidEndDateTime" },
     { header: "Status", accessor: (row) => <BidStatus status={getBidStatus(row)} /> },
     { header: "Actions", accessor: (row) => <BidActions bid={row} /> },
   ];
