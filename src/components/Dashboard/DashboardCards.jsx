@@ -1,50 +1,39 @@
-import { useAppSelector } from "../../hooks/reduxHooks";
-import { formatCurrency } from "../../utils/formatters";
-import Loader from "../Common/Loader";
-
 import {
-  FaCheckCircle,
-  FaClock,
-  FaTimesCircle,
-  FaFileAlt,
   FaCalendarWeek,
   FaCalendarAlt,
   FaCalendar,
   FaRupeeSign,
+  FaList,
+  FaCheckCircle,
+  FaClock,
+  FaTimesCircle,
 } from "react-icons/fa";
 
+import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
+import { formatCurrency } from "../../utils/formatters";
+import Loader from "../Common/Loader";
+import { setStatusFilter, setPage } from "../../features/filters/filterSlice";
+import { loadBidList } from "../../features/bids/bidThunk";
+import { loadDashboardStats } from "../../features/dashboard/dashboardSlice";
+
 const DashboardCards = () => {
+  const dispatch = useAppDispatch();
+
   const { stats, loading, error } = useAppSelector((s) => s.dashboard);
+  const selected = useAppSelector((s) => s.filters.selected);
 
   if (loading) return <Loader label="Loading Dashboard..." />;
   if (error) return <div className="text-danger">{error}</div>;
   if (!stats) return null;
 
+  const apply = (payload) => {
+    dispatch(setStatusFilter(payload));
+    dispatch(setPage(1));
+    dispatch(loadBidList());
+    dispatch(loadDashboardStats());
+  };
+
   const cards = [
-    // {
-    //   title: "Active Bids",
-    //   value: stats.activeBids ?? 0,
-    //   color: "#22c55e",
-    //   icon: <FaCheckCircle />,
-    // },
-    // {
-    //   title: "Closing Soon",
-    //   value: stats.closingSoon ?? 0,
-    //   color: "#f59e0b",
-    //   icon: <FaClock />,
-    // },
-    // {
-    //   title: "Expired Bids",
-    //   value: stats.expiredBids ?? 0,
-    //   color: "#ef4444",
-    //   icon: <FaTimesCircle />,
-    // },
-    // {
-    //   title: "Total Bids",
-    //   value: stats.totalBids ?? 0,
-    //   color: "#2563eb",
-    //   icon: <FaFileAlt />,
-    // },
     {
       title: "Weekly",
       value: stats.weeklyBids ?? 0,
@@ -64,6 +53,41 @@ const DashboardCards = () => {
       icon: <FaCalendar />,
     },
     {
+      title: "All Bids",
+      value: stats.totalBids ?? 0,
+      color: "#2563eb",
+      icon: <FaList />,
+      active:
+        !selected.Active &&
+        !selected.ClosingSoon &&
+        !selected.Expired,
+      payload: {},
+    },
+    {
+      title: "Active",
+      value: stats.activeBids ?? 0,
+      color: "#22c55e",
+      icon: <FaCheckCircle />,
+      active: !!selected.Active,
+      payload: { active: true },
+    },
+    {
+      title: "Closing Soon",
+      value: stats.closingSoon ?? 0,
+      color: "#f59e0b",
+      icon: <FaClock />,
+      active: !!selected.ClosingSoon,
+      payload: { closingSoon: true },
+    },
+    {
+      title: "Expired",
+      value: stats.expiredBids ?? 0,
+      color: "#ef4444",
+      icon: <FaTimesCircle />,
+      active: !!selected.Expired,
+      payload: { expired: true },
+    },
+    {
       title: "Estimated Value",
       value: formatCurrency(stats.totalEstimatedValue ?? 0),
       color: "#16a34a",
@@ -72,31 +96,44 @@ const DashboardCards = () => {
   ];
 
   return (
-<div className="row g-2 mb-2">
+    <div className="row g-2 mb-2">
       {cards.map((card) => (
-        <div className="col-6 col-lg-3" key={card.title}>
+        <div className="col-6 col-md-3 col-lg" key={card.title}>
           <div
-        className="bg-white rounded-3 shadow-sm p-2 h-100"
+            onClick={card.payload ? () => apply(card.payload) : undefined}
+            className="bg-white rounded-3 shadow-sm px-2 py-1 h-100"
             style={{
-              borderLeft: `5px solid ${card.color}`,
-              minHeight: "72px",
+              cursor: card.payload ? "pointer" : "default",
+              borderLeft: `4px solid ${card.color}`,
+              border: card.active
+                ? `2px solid ${card.color}`
+                : "1px solid #e5e7eb",
+              minHeight: "60px",
               transition: ".3s",
             }}
           >
             <div className="d-flex justify-content-between align-items-center">
+
               <div>
                 <div
-                  className="text-secondary fw-semibold"
-                  style={{ fontSize: "12px" }}
+                  className="fw-semibold text-secondary"
+                  style={{
+                    fontSize: "11px",
+                  }}
                 >
                   {card.title}
                 </div>
 
                 <div
-                  className="fw-bold mt-2"
+                  className="fw-bold"
                   style={{
-                    fontSize: "22px",
-                    color: "#1f2937",
+                    fontSize:
+                      card.title === "Estimated Value"
+                        ? "17px"
+                        : "20px",
+                    color: "#111827",
+                    marginTop: "2px",
+                    whiteSpace: "nowrap",
                   }}
                 >
                   {card.value}
@@ -105,12 +142,13 @@ const DashboardCards = () => {
 
               <div
                 style={{
-                  fontSize: "22px",
+                  fontSize: "18px",
                   color: card.color,
                 }}
               >
                 {card.icon}
               </div>
+
             </div>
           </div>
         </div>

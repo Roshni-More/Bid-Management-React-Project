@@ -5,7 +5,7 @@ import { loadFilterOptions } from "../features/filters/filterThunk";
 import { loadBidList } from "../features/bids/bidThunk";
 import { selectBidList } from "../features/bids/bidSelectors";
 import DashboardCards from "../components/Dashboard/DashboardCards";
-import StatusCards from "../components/Dashboard/StatusCards";
+// s
 import FilterBar from "../components/Filters/FilterBar";
 import BidTable from "../components/Bid/BidTable";
 import BidCard from "../components/Bid/BidCard";
@@ -26,7 +26,7 @@ const filters = useAppSelector((s) => s.filters.selected);
   return (
     <div className="container-fluid">
       <DashboardCards />
-      <StatusCards />
+      {/* <StatusCards /> */}
       <FilterBar />
 
       <div className="bg-white border rounded-3 shadow-sm">
