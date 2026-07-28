@@ -31,7 +31,14 @@ const filters = useAppSelector((s) => s.filters.selected);
 
       <div className="bg-white border rounded-3 shadow-sm">
         <div className="d-flex justify-content-between align-items-center p-3 border-bottom">
-          <h5 className="mb-0">All Bids ({totalRecords})</h5>
+          <h5  className="mb-0"
+  style={{
+    color: "#2563eb",
+    fontWeight: "700",
+    borderBottom: "3px solid #2563eb",
+    display: "inline-block",
+    paddingBottom: "8px",
+  }}>All Bids ({totalRecords})</h5>
           <div className="btn-group btn-group-sm">
             <button className={`btn ${view === "table" ? "btn-primary" : "btn-outline-secondary"}`} onClick={() => setView("table")}>Table</button>
             <button className={`btn ${view === "cards" ? "btn-primary" : "btn-outline-secondary"}`} onClick={() => setView("cards")}>Cards</button>
