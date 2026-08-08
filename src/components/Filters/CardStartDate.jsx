@@ -10,7 +10,16 @@ const CardStartDate = () => {
 
   return (
     <div className="filter-item">
-      <label>From</label>
+    <label
+    className="form-label mb-1"
+    style={{
+        textTransform: "none",
+        fontSize: "12px",
+        fontWeight: "500"
+    }}
+>
+    From
+</label>
 
       <input
         type="date"
