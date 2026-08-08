@@ -5,11 +5,7 @@ import { FaFileExcel } from "react-icons/fa";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 
-import {
-  getBidTitle,
-  getBidStatus,
-  formatDate,
-} from "../../utils/formatters";
+import { getBidStatus, formatDate } from "../../utils/formatters";
 
 const BidActions = ({ bid }) => {
   const navigate = useNavigate();
@@ -18,13 +14,13 @@ const BidActions = ({ bid }) => {
     const excelData = [
       {
         "Bid Number": bid.bidNumber,
-        "Title": getBidTitle(bid),
-        "Department": bid.departmentName,
-        "Organisation": bid.organisationName,
-        "Location": bid.officeName,
-        "Category": bid.itemCategory,
+        // "Title": getBidTitle(bid),
+        Department: bid.departmentName,
+        Organisation: bid.organisationName,
+        Location: bid.officeName,
+        Category: bid.itemCategory,
         "Bid Date": formatDate(bid.bidDate),
-        "Status": getBidStatus(bid),
+        Status: getBidStatus(bid),
       },
     ];
 
@@ -48,10 +44,15 @@ const BidActions = ({ bid }) => {
 
   return (
     <div className="d-flex gap-2">
-
       <button
         className="btn btn-sm btn-outline-primary"
-        onClick={() => navigate(`/details/${bid.bidNumber}`)}
+        onClick={() =>
+          navigate(`/details/${bid.bidNumber}`, {
+            state: {
+              categoryKey: bid.categoryKey,
+            },
+          })
+        }
         title="View Details"
       >
         <FiEye />
@@ -64,7 +65,6 @@ const BidActions = ({ bid }) => {
       >
         <FaFileExcel />
       </button>
-
     </div>
   );
 };

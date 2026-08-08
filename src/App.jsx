@@ -1,4 +1,3 @@
-
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import MainLayout from "./components/Layout/MainLayout";
 import DashboardPage from "./pages/DashboardPage";

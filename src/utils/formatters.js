@@ -36,5 +36,5 @@ export const getBidStatus = (bid) => {
 };
 
 // BidListDto has no single "title" field — fallback chain
-export const getBidTitle = (bid) =>
-  bid.cardItemName || bid.boqtitle || bid.itemCategory || "-";
+// export const getBidTitle = (bid) =>
+//   bid.cardItemName || bid.boqtitle || bid.itemCategory || "-";
