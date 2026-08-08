@@ -8,7 +8,16 @@ const EvaluationMethodFilter = () => {
 
   return (
     <div>
-      <label className="form-label text-uppercase text-muted small mb-1">Evaluation Method</label>
+      <label
+    className="form-label mb-1"
+    style={{
+        textTransform: "none",
+        fontSize: "12px",
+        fontWeight: "500"
+    }}
+>
+    Evaluation Method
+</label>
       <select
         className="form-select form-select-sm"
         value={value || ""}
