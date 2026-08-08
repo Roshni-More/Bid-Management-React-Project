@@ -35,6 +35,5 @@ export const getBidStatus = (bid) => {
   return "Expired";
 };
 
-// BidListDto has no single "title" field — fallback chain
 // export const getBidTitle = (bid) =>
 //   bid.cardItemName || bid.boqtitle || bid.itemCategory || "-";

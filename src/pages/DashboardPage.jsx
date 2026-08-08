@@ -1,97 +1,116 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../hooks/reduxHooks";
+
 import { loadDashboardStats } from "../features/dashboard/dashboardSlice";
 import { loadFilterOptions } from "../features/filters/filterThunk";
 import { loadBidList } from "../features/bids/bidThunk";
+
 import { selectBidList } from "../features/bids/bidSelectors";
 
 import DashboardCards from "../components/Dashboard/DashboardCards";
+
+// added for export to excel by Atharv
+import ExportExcelButton from "../components/Common/ExportExcelButton";
+
+// s
 import FilterBar from "../components/Filters/FilterBar";
 import BidTable from "../components/Bid/BidTable";
 import BidCard from "../components/Bid/BidCard";
 import BidPagination from "../components/Bid/BidPagination";
 
 const DashboardPage = () => {
-    const dispatch = useAppDispatch();
-    const [view, setView] = useState("table");
+  const dispatch = useAppDispatch();
 
-    const items = useAppSelector(selectBidList);
-    const totalRecords = useAppSelector((s) => s.bids.totalRecords);
-    const filters = useAppSelector((s) => s.filters.selected);
+  const [view, setView] = useState("table");
 
-    useEffect(() => {
-        dispatch(loadDashboardStats());
-        dispatch(loadFilterOptions());
-        dispatch(loadBidList());
-    }, [filters, dispatch]);
+  const items = useAppSelector(selectBidList);
 
-    return (
-        <div>
-            <DashboardCards />
+  const totalRecords = useAppSelector(
+    (s) => s.bids.totalRecords
+  );
 
-            <FilterBar />
+  const filters = useAppSelector((s) => s.filters.selected);
 
-            <div className="bg-white border rounded-3 shadow-sm">
+  useEffect(() => {
+    dispatch(loadDashboardStats());
+    dispatch(loadFilterOptions());
+    dispatch(loadBidList());
+  }, [dispatch]);
 
-                {/* All Bids Header */}
-                <div className="d-flex justify-content-between align-items-center px-2 py-1 border-bottom">
+  const sortedItems = useMemo(() => {
+    const priority = {
+      "Closing Soon": 1,
+      Active: 2,
+      Expired: 3,
+    };
 
-                    <h6
-                        className="mb-0 fw-semibold"
-                        style={{
-                            color: "#0d6efd",
-                            fontSize: "16px"
-                        }}
-                    >
-                        All Bids ({totalRecords})
-                    </h6>
+    return [...items].sort((a, b) => {
+      return (
+        (priority[a.status] ?? 4) -
+        (priority[b.status] ?? 4)
+      );
+    });
+  }, [items]);
 
-                    <div className="btn-group btn-group-sm">
+  return (
+    <>
+      <DashboardCards />
 
-                        <button
-                            className={`btn ${
-                                view === "table"
-                                    ? "btn-primary"
-                                    : "btn-outline-secondary"
-                            }`}
-                            onClick={() => setView("table")}
-                        >
-                            Table
-                        </button>
+      <FilterBar />
 
-                        <button
-                            className={`btn ${
-                                view === "cards"
-                                    ? "btn-primary"
-                                    : "btn-outline-secondary"
-                            }`}
-                            onClick={() => setView("cards")}
-                        >
-                            Cards
-                        </button>
+      <div className="bg-white border rounded-3 shadow-sm">
 
-                    </div>
-                </div>
+        <div className="d-flex justify-content-between align-items-center p-3 border-bottom">
+          <h5 className="mb-0">All Bids ({totalRecords})</h5>
+          
 
-                {/* Bid List */}
-                {view === "table" ? (
-                    <BidTable />
-                ) : (
-                    <div className="row g-3 p-3">
-                        {items.map((bid) => (
-                            <BidCard
-                                key={bid.bidNumber}
-                                bid={bid}
-                            />
-                        ))}
-                    </div>
-                )}
 
-                <BidPagination />
+<div className="d-flex gap-2">
+    <div className="btn-group btn-group-sm">
+        <button className={`btn ${ view === "table"? "btn-primary": "btn-outline-secondary" }`}
+            onClick={() => setView("table")}
+        >
+            Table
+        </button>
 
-            </div>
+        <button
+             className={`btn ${
+                view === "cards"
+                    ? "btn-primary"
+                    : "btn-outline-secondary"
+            }`}
+            onClick={() => setView("cards")}
+        >
+            Cards
+        </button>
+    </div>
+
+    <ExportExcelButton filters={filters} />
+</div>
+
+         
         </div>
-    );
+
+        {view === "table" ? (
+          <BidTable items={sortedItems} />
+        ) : (
+          <div className="row g-3 p-3">
+
+            {sortedItems.map((bid) => (
+              <BidCard
+                key={bid.bidNumber}
+                bid={bid}
+              />
+            ))}
+
+          </div>
+        )}
+
+        <BidPagination />
+
+      </div>
+    </>
+  );
 };
 
 export default DashboardPage;
