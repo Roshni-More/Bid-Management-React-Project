@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../hooks/reduxHooks";
 
 import { loadDashboardStats } from "../features/dashboard/dashboardSlice";
@@ -8,6 +8,10 @@ import { loadBidList } from "../features/bids/bidThunk";
 import { selectBidList } from "../features/bids/bidSelectors";
 
 import DashboardCards from "../components/Dashboard/DashboardCards";
+
+// Export to Excel
+import ExportExcelButton from "../components/Common/ExportExcelButton";
+
 import FilterBar from "../components/Filters/FilterBar";
 import BidTable from "../components/Bid/BidTable";
 import BidCard from "../components/Bid/BidCard";
@@ -21,11 +25,11 @@ const DashboardPage = () => {
     const items = useAppSelector(selectBidList);
 
     const totalRecords = useAppSelector(
-        (s) => s.bids.totalRecords
+        (state) => state.bids.totalRecords
     );
 
     const filters = useAppSelector(
-        (s) => s.filters.selected
+        (state) => state.filters.selected
     );
 
     useEffect(() => {
@@ -34,8 +38,25 @@ const DashboardPage = () => {
         dispatch(loadBidList());
     }, [filters, dispatch]);
 
+    // Sort bids by status priority
+    const sortedItems = useMemo(() => {
+        const priority = {
+            "Closing Soon": 1,
+            Active: 2,
+            Expired: 3,
+        };
+
+        return [...items].sort((a, b) => {
+            return (
+                (priority[a.status] ?? 4) -
+                (priority[b.status] ?? 4)
+            );
+        });
+    }, [items]);
+
     return (
         <div>
+
             <DashboardCards />
 
             <FilterBar />
@@ -49,56 +70,74 @@ const DashboardPage = () => {
                         className="mb-0 fw-semibold"
                         style={{
                             color: "#0d6efd",
-                            fontSize: "16px"
+                            fontSize: "16px",
                         }}
                     >
                         All Bids ({totalRecords})
                     </h6>
 
-                    <div className="btn-group btn-group-sm">
+                    <div className="d-flex align-items-center gap-2">
 
-                        <button
-                            className={`btn ${
-                                view === "table"
-                                    ? "btn-primary"
-                                    : "btn-outline-secondary"
-                            }`}
-                            onClick={() => setView("table")}
-                        >
-                            Table
-                        </button>
+                        {/* Table / Cards */}
+                        <div className="btn-group btn-group-sm">
 
-                        <button
-                            className={`btn ${
-                                view === "cards"
-                                    ? "btn-primary"
-                                    : "btn-outline-secondary"
-                            }`}
-                            onClick={() => setView("cards")}
-                        >
-                            Cards
-                        </button>
+                            <button
+                                className={`btn ${
+                                    view === "table"
+                                        ? "btn-primary"
+                                        : "btn-outline-secondary"
+                                }`}
+                                onClick={() =>
+                                    setView("table")
+                                }
+                            >
+                                Table
+                            </button>
+
+                            <button
+                                className={`btn ${
+                                    view === "cards"
+                                        ? "btn-primary"
+                                        : "btn-outline-secondary"
+                                }`}
+                                onClick={() =>
+                                    setView("cards")
+                                }
+                            >
+                                Cards
+                            </button>
+
+                        </div>
+
+                        {/* Export Excel */}
+                        <ExportExcelButton
+                            filters={filters}
+                        />
 
                     </div>
                 </div>
 
                 {/* Bid List */}
                 {view === "table" ? (
-                    <BidTable />
+                    <BidTable items={sortedItems} />
                 ) : (
                     <div className="row g-3 p-3">
-                        {items.map((bid) => (
+
+                        {sortedItems.map((bid) => (
                             <BidCard
                                 key={bid.bidNumber}
                                 bid={bid}
                             />
                         ))}
+
                     </div>
                 )}
 
+                {/* Pagination */}
                 <BidPagination />
 
             </div>
+
         </div>
     );
 };
