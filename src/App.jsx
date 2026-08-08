@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import {
   BrowserRouter,
   Routes,
@@ -6,9 +5,7 @@ import {
   Navigate,
 } from "react-router-dom";
 
-=======
 import { BrowserRouter, Routes, Route } from "react-router-dom";
->>>>>>> 7c2d18634f66b31f3755d72adc4f097212d14857
 import MainLayout from "./components/Layout/MainLayout";
 import DashboardPage from "./pages/DashboardPage";
 import BidDetailsPage from "./pages/BidDetailsPage";

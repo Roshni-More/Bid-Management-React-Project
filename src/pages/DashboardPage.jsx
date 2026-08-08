@@ -14,7 +14,6 @@ import BidCard from "../components/Bid/BidCard";
 import BidPagination from "../components/Bid/BidPagination";
 
 const DashboardPage = () => {
-<<<<<<< HEAD
 
   const dispatch = useAppDispatch();
 
@@ -94,7 +93,6 @@ const DashboardPage = () => {
 
     </div>
   );
-=======
     const dispatch = useAppDispatch();
     const [view, setView] = useState("table");
 
@@ -175,7 +173,6 @@ const DashboardPage = () => {
             </div>
         </div>
     );
->>>>>>> 7c2d18634f66b31f3755d72adc4f097212d14857
 };
 
 export default DashboardPage;
