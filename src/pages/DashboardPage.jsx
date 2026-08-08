@@ -29,6 +29,8 @@ const DashboardPage = () => {
     (s) => s.bids.totalRecords
   );
 
+  const filters = useAppSelector((s) => s.filters.selected);
+
   useEffect(() => {
     dispatch(loadDashboardStats());
     dispatch(loadFilterOptions());
@@ -63,7 +65,7 @@ const DashboardPage = () => {
           
 
 
-          <div className="d-flex gap-2">
+<div className="d-flex gap-2">
     <div className="btn-group btn-group-sm">
         <button className={`btn ${ view === "table"? "btn-primary": "btn-outline-secondary" }`}
             onClick={() => setView("table")}
@@ -86,35 +88,7 @@ const DashboardPage = () => {
     <ExportExcelButton filters={filters} />
 </div>
 
-          <h5 className="mb-0">
-            All Bids ({totalRecords})
-          </h5>
-
-          <div className="btn-group btn-group-sm">
-
-            <button
-              className={`btn ${
-                view === "table"
-                  ? "btn-primary"
-                  : "btn-outline-secondary"
-              }`}
-              onClick={() => setView("table")}
-            >
-              Table
-            </button>
-
-            <button
-              className={`btn ${
-                view === "cards"
-                  ? "btn-primary"
-                  : "btn-outline-secondary"
-              }`}
-              onClick={() => setView("cards")}
-            >
-              Cards
-            </button>
-
-          </div>
+         
         </div>
 
         {view === "table" ? (
