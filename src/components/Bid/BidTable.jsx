@@ -1,14 +1,21 @@
 import { useNavigate } from "react-router-dom";
+
 import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
 
 import {
-    selectBidList,
-    selectBidListLoading,
-    selectBidListError
+  selectBidList,
+  selectBidListLoading,
+  selectBidListError,
 } from "../../features/bids/bidSelectors";
 
 import { loadBidList } from "../../features/bids/bidThunk";
 import { setSort } from "../../features/filters/filterSlice";
+
+import {
+  formatDate,
+  formatDateTime,
+  getBidStatus,
+} from "../../utils/formatters";
 
 import Table from "../Common/Table";
 import Loader from "../Common/Loader";
@@ -18,132 +25,160 @@ import NoData from "../Common/NoData";
 import BidStatus from "./BidStatus";
 import BidActions from "./BidActions";
 
-import {
-    formatDate,
-    getBidStatus,
-    getBidTitle
-} from "../../utils/formatters";
-
 const BidTable = () => {
-    const dispatch = useAppDispatch();
-    const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
-    const items = useAppSelector(selectBidList);
-    const loading = useAppSelector(selectBidListLoading);
-    const error = useAppSelector(selectBidListError);
+  const items = useAppSelector(selectBidList);
+  const loading = useAppSelector(selectBidListLoading);
+  const error = useAppSelector(selectBidListError);
 
-    const { SortBy, Descending } = useAppSelector(
-        (s) => s.filters.selected
+  const { SortBy, Descending } = useAppSelector(
+    (state) => state.filters.selected,
+  );
+
+  const handleSortChange = (sortKey) => {
+    const descending = SortBy === sortKey ? !Descending : false;
+
+    dispatch(
+      setSort({
+        sortBy: sortKey,
+        descending,
+      }),
     );
+  };
 
-    const handleSortChange = (sortKey) => {
-        const descending =
-            SortBy === sortKey ? !Descending : false;
+  const handleRetry = () => {
+    dispatch(loadBidList());
+  };
 
-        dispatch(
-            setSort({
-                sortBy: sortKey,
-                descending
-            })
-        );
+  const columns = [
+    {
+      header: "Bid Number",
+      accessor: (row) => (
+        <span
+          className="text-primary fw-semibold"
+          role="button"
+          onClick={() => navigate(`/details/${row.bidNumber}`)}
+        >
+          {row.bidNumber}
+        </span>
+      ),
+    },
 
-        dispatch(loadBidList());
-    };
+    {
+      header: "Department",
+      accessor: (row) => {
+        const value = row.departmentName || "";
 
-    const handleRetry = () => {
-        dispatch(loadBidList());
-    };
+        const words = value.trim().split(/\s+/);
 
-    const columns = [
-        {
-            header: "Bid Number",
-            accessor: (row) => (
-                <span
-                    className="text-primary fw-semibold"
-                    role="button"
-                    onClick={() =>
-                        navigate(`/details/${row.bidNumber}`)
-                    }
-                >
-                    {row.bidNumber}
-                </span>
-            )
-        },
-
-        {
-            header: "Title",
-            accessor: (row) => getBidTitle(row)
-        },
-
-        {
-            header: "Department",
-            accessor: (row) => row.departmentName,
-            sortKey: "Department"
-        },
-
-        {
-            header: "Organisation",
-            accessor: (row) => row.organisationName
-        },
-
-        {
-            header: "Location",
-            accessor: (row) => row.officeName
-        },
-
-        {
-            header: "Category",
-            accessor: (row) => row.itemCategory
-        },
-
-        {
-            header: "Bid Date",
-            accessor: (row) => formatDate(row.bidDate),
-            sortKey: "BidDate"
-        },
-
-        {
-            header: "Status",
-            accessor: (row) => (
-                <BidStatus status={getBidStatus(row)} />
-            )
-        },
-
-        {
-            header: "Actions",
-            accessor: (row) => (
-                <BidActions bid={row} />
-            )
-        }
-    ];
-
-    if (loading) {
-        return <Loader />;
-    }
-
-    if (error) {
         return (
-            <ErrorDisplay
-                message={error}
-                onRetry={handleRetry}
-            />
+          <span title={value}>
+            {words.length > 4 ? `${words.slice(0, 4).join(" ")}...` : value}
+          </span>
         );
-    }
+      },
+      sortKey: "Department",
+    },
 
-    if (items.length === 0) {
-        return <NoData />;
-    }
+    {
+      header: "Organisation",
+      accessor: (row) => {
+        const value = row.organisationName || "";
 
-    return (
-        <Table
-            columns={columns}
-            data={items}
-            rowKey={(row) => row.bidNumber}
-            sortBy={SortBy}
-            descending={Descending}
-            onSortChange={handleSortChange}
-        />
-    );
+        const words = value.trim().split(/\s+/);
+
+        return (
+          <span title={value}>
+            {words.length > 4 ? `${words.slice(0, 4).join(" ")}...` : value}
+          </span>
+        );
+      },
+    },
+
+    {
+      header: "Location",
+      accessor: (row) => {
+        const value = row.officeName || "";
+
+        const words = value.trim().split(/\s+/);
+
+        return (
+          <span title={value}>
+            {words.length > 4 ? `${words.slice(0, 4).join(" ")}...` : value}
+          </span>
+        );
+      },
+    },
+
+    {
+      header: "Category",
+      accessor: (row) => row.categoryKey || "-",
+    },
+
+    {
+      header: "Sub-Category",
+      accessor: (row) => row.categorySubKey || "-",
+    },
+
+    {
+      header: "Bid Date",
+      accessor: (row) => (
+        <div
+          className="d-flex align-items-center"
+          style={{
+            whiteSpace: "nowrap",
+            gap: "8px",
+          }}
+        >
+          <span className="text-success">
+            {row.cardStartDate ? formatDate(row.cardStartDate) : "-"}
+          </span>
+
+          <span className="text-muted">→</span>
+
+          <span className="text-danger">
+            {row.cardEndDate ? formatDate(row.cardEndDate) : "-"}
+          </span>
+        </div>
+      ),
+      sortKey: "BidDate",
+    },
+
+    {
+      header: "Status",
+      accessor: (row) => <BidStatus status={getBidStatus(row)} />,
+    },
+
+    {
+      header: "Actions",
+      accessor: (row) => <BidActions bid={row} />,
+    },
+  ];
+
+  if (loading) {
+    return <Loader />;
+  }
+
+  if (error) {
+    return <ErrorDisplay message={error} onRetry={handleRetry} />;
+  }
+
+  if (items.length === 0) {
+    return <NoData />;
+  }
+
+  return (
+    <Table
+      columns={columns}
+      data={items}
+      rowKey={(row) => row.bidNumber}
+      sortBy={SortBy}
+      descending={Descending}
+      onSortChange={handleSortChange}
+    />
+  );
 };
 
 export default BidTable;
