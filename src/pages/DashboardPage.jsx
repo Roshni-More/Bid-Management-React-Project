@@ -1,9 +1,12 @@
-import  { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../hooks/reduxHooks";
+
 import { loadDashboardStats } from "../features/dashboard/dashboardSlice";
 import { loadFilterOptions } from "../features/filters/filterThunk";
 import { loadBidList } from "../features/bids/bidThunk";
+
 import { selectBidList } from "../features/bids/bidSelectors";
+
 import DashboardCards from "../components/Dashboard/DashboardCards";
 
 // added for export to excel by Atharv
@@ -17,23 +20,44 @@ import BidPagination from "../components/Bid/BidPagination";
 
 const DashboardPage = () => {
   const dispatch = useAppDispatch();
+
   const [view, setView] = useState("table");
+
   const items = useAppSelector(selectBidList);
-  const totalRecords = useAppSelector((s) => s.bids.totalRecords);
-const filters = useAppSelector((s) => s.filters.selected);
+
+  const totalRecords = useAppSelector(
+    (s) => s.bids.totalRecords
+  );
+
   useEffect(() => {
     dispatch(loadDashboardStats());
     dispatch(loadFilterOptions());
     dispatch(loadBidList());
-  }, [filters,dispatch]);
+  }, [dispatch]);
+
+  const sortedItems = useMemo(() => {
+    const priority = {
+      "Closing Soon": 1,
+      Active: 2,
+      Expired: 3,
+    };
+
+    return [...items].sort((a, b) => {
+      return (
+        (priority[a.status] ?? 4) -
+        (priority[b.status] ?? 4)
+      );
+    });
+  }, [items]);
 
   return (
-    <div className="container-fluid">
+    <>
       <DashboardCards />
-      {/* <StatusCards /> */}
+
       <FilterBar />
 
       <div className="bg-white border rounded-3 shadow-sm">
+
         <div className="d-flex justify-content-between align-items-center p-3 border-bottom">
           <h5 className="mb-0">All Bids ({totalRecords})</h5>
           
@@ -61,19 +85,57 @@ const filters = useAppSelector((s) => s.filters.selected);
 
     <ExportExcelButton filters={filters} />
 </div>
+
+          <h5 className="mb-0">
+            All Bids ({totalRecords})
+          </h5>
+
+          <div className="btn-group btn-group-sm">
+
+            <button
+              className={`btn ${
+                view === "table"
+                  ? "btn-primary"
+                  : "btn-outline-secondary"
+              }`}
+              onClick={() => setView("table")}
+            >
+              Table
+            </button>
+
+            <button
+              className={`btn ${
+                view === "cards"
+                  ? "btn-primary"
+                  : "btn-outline-secondary"
+              }`}
+              onClick={() => setView("cards")}
+            >
+              Cards
+            </button>
+
+          </div>
         </div>
 
         {view === "table" ? (
-          <BidTable />
+          <BidTable items={sortedItems} />
         ) : (
           <div className="row g-3 p-3">
-            {items.map((bid) => <BidCard key={bid.bidNumber} bid={bid} />)}
+
+            {sortedItems.map((bid) => (
+              <BidCard
+                key={bid.bidNumber}
+                bid={bid}
+              />
+            ))}
+
           </div>
         )}
 
         <BidPagination />
+
       </div>
-    </div>
+    </>
   );
 };
 
