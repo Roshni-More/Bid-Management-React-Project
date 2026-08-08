@@ -26,6 +26,10 @@ export const toApiDate = (value) => {
 
 // Derives display status from BidListDto's isActive / isClosingSoon flags
 export const getBidStatus = (bid) => {
+  console.log("Bid:", bid.bidNumber);
+  console.log("isActive:", bid.isActive);
+  console.log("isClosingSoon:", bid.isClosingSoon);
+
   if (bid.isClosingSoon) return "ClosingSoon";
   if (bid.isActive) return "Active";
   return "Expired";
