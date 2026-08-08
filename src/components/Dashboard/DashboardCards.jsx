@@ -87,12 +87,12 @@ const DashboardCards = () => {
       active: !!selected.Expired,
       payload: { expired: true },
     },
-    {
-      title: "Estimated Value",
-      value: formatCurrency(stats.totalEstimatedValue ?? 0),
-      color: "#16a34a",
-      icon: <FaRupeeSign />,
-    },
+    // {
+    //   title: "Estimated Value",
+    //   value: formatCurrency(stats.totalEstimatedValue ?? 0),
+    //   color: "#16a34a",
+    //   icon: <FaRupeeSign />,
+    // },
   ];
 
   return (
