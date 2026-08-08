@@ -5,7 +5,7 @@ import { saveAs } from "file-saver";
 
 import { fetchBidList } from "../../api/bidApi";
 import {
-    getBidTitle,
+   
     getBidStatus,
     formatDate,
 } from "../../utils/formatters";
