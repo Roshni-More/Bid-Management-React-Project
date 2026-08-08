@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../hooks/reduxHooks";
+
 import { loadDashboardStats } from "../features/dashboard/dashboardSlice";
 import { loadFilterOptions } from "../features/filters/filterThunk";
 import { loadBidList } from "../features/bids/bidThunk";
+
 import { selectBidList } from "../features/bids/bidSelectors";
 
 import DashboardCards from "../components/Dashboard/DashboardCards";
@@ -13,11 +15,18 @@ import BidPagination from "../components/Bid/BidPagination";
 
 const DashboardPage = () => {
     const dispatch = useAppDispatch();
+
     const [view, setView] = useState("table");
 
     const items = useAppSelector(selectBidList);
-    const totalRecords = useAppSelector((s) => s.bids.totalRecords);
-    const filters = useAppSelector((s) => s.filters.selected);
+
+    const totalRecords = useAppSelector(
+        (s) => s.bids.totalRecords
+    );
+
+    const filters = useAppSelector(
+        (s) => s.filters.selected
+    );
 
     useEffect(() => {
         dispatch(loadDashboardStats());
