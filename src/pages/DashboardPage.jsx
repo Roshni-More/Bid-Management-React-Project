@@ -5,6 +5,10 @@ import { loadFilterOptions } from "../features/filters/filterThunk";
 import { loadBidList } from "../features/bids/bidThunk";
 import { selectBidList } from "../features/bids/bidSelectors";
 import DashboardCards from "../components/Dashboard/DashboardCards";
+
+// added for export to excel by Atharv
+import ExportExcelButton from "../components/Common/ExportExcelButton";
+
 // s
 import FilterBar from "../components/Filters/FilterBar";
 import BidTable from "../components/Bid/BidTable";
@@ -32,10 +36,31 @@ const filters = useAppSelector((s) => s.filters.selected);
       <div className="bg-white border rounded-3 shadow-sm">
         <div className="d-flex justify-content-between align-items-center p-3 border-bottom">
           <h5 className="mb-0">All Bids ({totalRecords})</h5>
-          <div className="btn-group btn-group-sm">
-            <button className={`btn ${view === "table" ? "btn-primary" : "btn-outline-secondary"}`} onClick={() => setView("table")}>Table</button>
-            <button className={`btn ${view === "cards" ? "btn-primary" : "btn-outline-secondary"}`} onClick={() => setView("cards")}>Cards</button>
-          </div>
+          
+
+
+          <div className="d-flex gap-2">
+    <div className="btn-group btn-group-sm">
+        <button className={`btn ${ view === "table"? "btn-primary": "btn-outline-secondary" }`}
+            onClick={() => setView("table")}
+        >
+            Table
+        </button>
+
+        <button
+             className={`btn ${
+                view === "cards"
+                    ? "btn-primary"
+                    : "btn-outline-secondary"
+            }`}
+            onClick={() => setView("cards")}
+        >
+            Cards
+        </button>
+    </div>
+
+    <ExportExcelButton filters={filters} />
+</div>
         </div>
 
         {view === "table" ? (
