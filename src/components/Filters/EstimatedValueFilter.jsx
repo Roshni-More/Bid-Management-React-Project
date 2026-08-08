@@ -2,57 +2,71 @@ import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
 import { setFilterField } from "../../features/filters/filterSlice";
 
 const EstimatedValueFilter = () => {
-  const dispatch = useAppDispatch();
+    const dispatch = useAppDispatch();
 
-  const minValue = useAppSelector(
-    (state) => state.filters.selected.MinEstimatedValue
-  );
+    const minValue = useAppSelector(
+        (state) => state.filters.selected.MinEstimatedValue
+    );
 
-  const maxValue = useAppSelector(
-    (state) => state.filters.selected.MaxEstimatedValue
-  );
+    const maxValue = useAppSelector(
+        (state) => state.filters.selected.MaxEstimatedValue
+    );
 
-  return (
-    <div className="row g-2">
-      <div className="col">
-        <label className="form-label">Min Estimated Value</label>
+    return (
+        <div className="row g-1">
 
-        <input
-          type="number"
-          className="form-control"
-          placeholder="Min Value"
-          value={minValue || ""}
-          onChange={(e) =>
-            dispatch(
-              setFilterField({
-                field: "MinEstimatedValue",
-                value: e.target.value,
-              })
-            )
-          }
-        />
-      </div>
+            {/* Min Estimated Value */}
+            <div className="col-6">
+                <label
+                    className="form-label fw-semibold mb-1"
+                    style={{ fontSize: "12px" }}
+                >
+                    Min Estimat
+                </label>
 
-      <div className="col">
-        <label className="form-label">Max Estimated Value</label>
+                <input
+                    type="number"
+                    className="form-control form-control-sm"
+                    placeholder="Min"
+                    value={minValue || ""}
+                    onChange={(e) =>
+                        dispatch(
+                            setFilterField({
+                                field: "MinEstimatedValue",
+                                value: e.target.value,
+                            })
+                        )
+                    }
+                />
+            </div>
 
-        <input
-          type="number"
-          className="form-control"
-          placeholder="Max Value"
-          value={maxValue || ""}
-          onChange={(e) =>
-            dispatch(
-              setFilterField({
-                field: "MaxEstimatedValue",
-                value: e.target.value,
-              })
-            )
-          }
-        />
-      </div>
-    </div>
-  );
+            {/* Max Estimated Value */}
+            <div className="col-6">
+                <label
+                    className="form-label fw-semibold mb-1"
+                    style={{ fontSize: "12px" }}
+                >
+                    Max Estimat
+                </label>
+
+                <input
+                    type="number"
+                    className="form-control form-control-sm"
+                    placeholder="Max"
+                    value={maxValue || ""}
+                    onChange={(e) =>
+                        dispatch(
+                            setFilterField({
+                                field: "MaxEstimatedValue",
+                                value: e.target.value,
+                            })
+                        )
+                    }
+                />
+            </div>
+
+        </div>
+    );
 };
 
 export default EstimatedValueFilter;
