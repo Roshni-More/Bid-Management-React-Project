@@ -381,69 +381,7 @@ const Login = () => {
           {/* =====================================
               REMEMBER + FORGOT
           ===================================== */}
-          <div
-            style={{
-              display: "flex",
-
-              justifyContent: "space-between",
-
-              alignItems: "center",
-
-              marginBottom: "25px",
-            }}
-          >
-
-            {/* Remember Me */}
-            <label
-              style={{
-                display: "flex",
-
-                alignItems: "center",
-
-                gap: "7px",
-
-                fontSize: "14px",
-
-                color: "#334155",
-
-                cursor: "pointer",
-              }}
-            >
-
-              <input
-                type="checkbox"
-                style={{
-                  width: "16px",
-                  height: "16px",
-                }}
-              />
-
-              Remember me
-
-            </label>
-
-
-            {/* Forgot Password */}
-            <button
-              type="button"
-              style={{
-                border: "none",
-
-                background: "transparent",
-
-                color: "#075eb5",
-
-                fontSize: "14px",
-
-                cursor: "pointer",
-
-                padding: 0,
-              }}
-            >
-              Forgot Password?
-            </button>
-
-          </div>
+         
 
 
           {/* =====================================
@@ -487,113 +425,19 @@ const Login = () => {
         {/* =========================================
             OR DIVIDER
         ========================================= */}
-        <div
-          style={{
-            display: "flex",
-
-            alignItems: "center",
-
-            gap: "12px",
-
-            margin: "28px 0",
-          }}
-        >
-
-          <div
-            style={{
-              flex: 1,
-              height: "1px",
-              background: "#e2e8f0",
-            }}
-          />
-
-          <span
-            style={{
-              color: "#64748b",
-              fontSize: "13px",
-            }}
-          >
-            OR
-          </span>
-
-          <div
-            style={{
-              flex: 1,
-              height: "1px",
-              background: "#e2e8f0",
-            }}
-          />
-
-        </div>
+       
 
 
         {/* =========================================
             GEM SECURE
         ========================================= */}
-        <button
-          type="button"
-          style={{
-            width: "100%",
-
-            height: "52px",
-
-            border: "1px solid #cbd5e1",
-
-            borderRadius: "8px",
-
-            background: "#ffffff",
-
-            color: "#12375d",
-
-            fontSize: "15px",
-
-            fontWeight: "600",
-
-            cursor: "pointer",
-          }}
-        >
-          🛡️ Login with GeM Secure
-        </button>
+       
 
 
         {/* =========================================
             REGISTER
         ========================================= */}
-        <div
-          style={{
-            textAlign: "center",
-
-            marginTop: "26px",
-
-            color: "#64748b",
-
-            fontSize: "14px",
-          }}
-        >
-          New to GeM BIDS?
-
-          <button
-            type="button"
-            style={{
-              border: "none",
-
-              background: "transparent",
-
-              color: "#075eb5",
-
-              fontWeight: "600",
-
-              marginLeft: "5px",
-
-              cursor: "pointer",
-
-              padding: 0,
-            }}
-          >
-            Register here
-          </button>
-
-        </div>
+        
 
       </div>
 
