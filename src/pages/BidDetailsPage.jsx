@@ -15,21 +15,16 @@ import {
 import Loader from "../components/Common/Loader";
 import ErrorDisplay from "../components/Common/ErrorDisplay";
 
-import {
-  formatCurrency,
-  formatDate,
-  formatDateTime,
-} from "../utils/formatters";
+import { formatDate, formatDateTime } from "../utils/formatters";
 
 const BidDetailsPage = () => {
   const params = useParams();
-
-  // Route is "/details/*" because bid numbers contain slashes
-  // Example: GEM/2024/B/1234567
-  const bidNumber = params["*"];
-
-  const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+
+  // Bid number contains /
+  // Example: GEM/2026/B/7806411
+  const bidNumber = params["*"];
 
   const bid = useAppSelector(selectSelectedBid);
   const loading = useAppSelector(selectBidDetailLoading);
@@ -51,62 +46,114 @@ const BidDetailsPage = () => {
     }
   };
 
+  // Loading
   if (loading) {
     return <Loader />;
   }
 
+  // Error
   if (error) {
     return <ErrorDisplay message={error} onRetry={handleRetry} />;
   }
 
+  // No bid
   if (!bid) {
-    return null;
+    return (
+      <div className="container-fluid py-4">
+        <div className="alert alert-warning">Bid details not found.</div>
+      </div>
+    );
   }
 
+  // =====================================================
+  // BID DETAILS
+  // =====================================================
+
   const rows = [
-    ["Category", bid.categoryKey],
+    {
+      label: "Bid No",
+      value: bid.bidNumber,
+    },
 
-    ["Estimated Value", formatCurrency(bid.estimatedBidValue)],
+    {
+      label: "Department",
+      value: bid.departmentName,
+    },
 
-    ["EMD Amount", formatCurrency(bid.emdAmount)],
+    {
+      label: "Organization",
+      value: bid.organisationName,
+    },
 
-    ["Bid Date", bid.bidDate ? formatDate(bid.bidDate) : "-"],
+    {
+      label: "Location",
+      value: bid.officeName,
+    },
 
-    [
-      "Closing Date",
-      bid.bidEndDateTime ? formatDateTime(bid.bidEndDateTime) : "-",
-    ],
+    {
+      label: "Category",
+      value: bid.category || bid.categoryKey,
+    },
 
-    ["Evaluation Method", bid.evaluationMethod],
+    {
+      label: "Subcategory",
+      value: bid.categorySubKey || bid.itemCategory,
+    },
+
+    {
+      label: "Bid Start Date",
+      value: bid.bidDate ? formatDate(bid.bidDate) : "-",
+    },
+
+    {
+      label: "Bid End Date",
+      value: bid.bidEndDateTime ? formatDateTime(bid.bidEndDateTime) : "-",
+    },
+
+    {
+      label: "Status",
+      value: bid.status || "Closing Soon",
+    },
   ];
 
   return (
-    <div className="container py-4">
+    <div className="container-fluid py-3">
+      {/* ================= BACK BUTTON ================= */}
+
       <button
+        type="button"
         className="btn btn-sm btn-outline-secondary mb-3"
         onClick={() => navigate(-1)}
       >
         ← Back
       </button>
 
+      {/* ================= DETAILS CARD ================= */}
+
       <div className="card shadow-sm">
-        <div className="card-header">
+        {/* HEADER */}
+
+        <div className="card-header bg-white">
           <h4 className="mb-0">Bid Details</h4>
         </div>
 
+        {/* BODY */}
+
         <div className="card-body">
           <div className="row">
-            {rows.map(([label, value]) => (
-              <div className="col-md-6 mb-3" key={label}>
-                <div className="fw-semibold">{label}</div>
+            {rows.map((item) => (
+              <div className="col-md-6 mb-4" key={item.label}>
+                <div className="fw-semibold mb-1">{item.label}</div>
 
-                <div>{value || "-"}</div>
+                <div className="text-secondary">{item.value || "-"}</div>
               </div>
             ))}
           </div>
 
+          {/* ================= PDF ================= */}
+
           {bid.pdfUrl && (
-            <div className="mt-3">
+            <div className="mt-2">
               <a
                 href={bid.pdfUrl}
                 target="_blank"
