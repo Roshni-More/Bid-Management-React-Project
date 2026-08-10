@@ -5,11 +5,11 @@ import { saveAs } from "file-saver";
 import { exportBids } from "../../api/bidApi";
 
 const ExportExcelButton = ({ filters }) => {
-    const [exporting, setExporting] = useState(false);
+  const [exporting, setExporting] = useState(false);
 
-    const handleExport = async () => {
-        try {
-            setExporting(true);
+  const handleExport = async () => {
+    try {
+      setExporting(true);
 
             console.log("Export filters:", filters);
 

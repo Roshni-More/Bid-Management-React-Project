@@ -123,7 +123,7 @@ const BidTable = () => {
     },
 
     {
-      header: "Bid Date",
+      header: "Start Date",
       accessor: (row) => (
         <div
           className="d-flex align-items-center"
@@ -132,13 +132,38 @@ const BidTable = () => {
             gap: "8px",
           }}
         >
-          <span className="text-success">
+          <span
+            className="text-success"
+            style={{
+              // color: "#d39e00",
+              fontWeight: 600,
+              fontSize: "11px",
+            }}
+          >
             {row.cardStartDate ? formatDate(row.cardStartDate) : "-"}
           </span>
-
-          <span className="text-muted">→</span>
-
-          <span className="text-danger">
+        </div>
+      ),
+      sortKey: "BidDate",
+    },
+    {
+      header: "End Date",
+      accessor: (row) => (
+        <div
+          className="d-flex align-items-center"
+          style={{
+            whiteSpace: "nowrap",
+            gap: "8px",
+          }}
+        >
+          <span
+            className="text-warning"
+            style={{
+              color: "#d39e00",
+              fontWeight: 600,
+              fontSize: "11px",
+            }}
+          >
             {row.cardEndDate ? formatDate(row.cardEndDate) : "-"}
           </span>
         </div>
