@@ -15,3 +15,19 @@ export const fetchBidDetail = async (bidNumber) => {
   const response = await axiosInstance.get(API_ENDPOINTS.BID_DETAIL(bidNumber));
   return response.data;
 };
+
+
+
+
+// <--Export bids to Excel by Atharv-->
+export const exportBids = async (filters) => {
+    const response = await axiosInstance.get(
+        API_ENDPOINTS.BIDS_EXPORT,
+        {
+            params: filters,
+            responseType: "blob",
+        }
+    );
+
+    return response;
+};

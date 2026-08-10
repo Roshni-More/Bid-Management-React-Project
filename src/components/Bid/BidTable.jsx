@@ -208,6 +208,7 @@ const BidTable = () => {
         return <NoData />;
     }
 
+<<<<<<< HEAD
     return (
         <Table
             columns={columns}
@@ -218,6 +219,110 @@ const BidTable = () => {
             onSortChange={handleSortChange}
         />
     );
+=======
+        const words = value.trim().split(/\s+/);
+
+        return (
+          <span title={value}>
+            {words.length > 4 ? `${words.slice(0, 4).join(" ")}...` : value}
+          </span>
+        );
+      },
+    },
+
+    {
+      header: "Category",
+      accessor: (row) => row.categoryKey || "-",
+    },
+
+    {
+      header: "Sub-Category",
+      accessor: (row) => row.categorySubKey || "-",
+    },
+
+    {
+      header: "Start Date",
+      accessor: (row) => (
+        <div
+          className="d-flex align-items-center"
+          style={{
+            whiteSpace: "nowrap",
+            gap: "8px",
+          }}
+        >
+          <span
+            className="text-success"
+            style={{
+              // color: "#d39e00",
+              fontWeight: 600,
+              fontSize: "11px",
+            }}
+          >
+            {row.cardStartDate ? formatDate(row.cardStartDate) : "-"}
+          </span>
+        </div>
+      ),
+      sortKey: "BidDate",
+    },
+    {
+      header: "End Date",
+      accessor: (row) => (
+        <div
+          className="d-flex align-items-center"
+          style={{
+            whiteSpace: "nowrap",
+            gap: "8px",
+          }}
+        >
+          <span
+            className="text-warning"
+            style={{
+              color: "#d39e00",
+              fontWeight: 600,
+              fontSize: "11px",
+            }}
+          >
+            {row.cardEndDate ? formatDate(row.cardEndDate) : "-"}
+          </span>
+        </div>
+      ),
+      sortKey: "BidDate",
+    },
+
+    {
+      header: "Status",
+      accessor: (row) => <BidStatus status={getBidStatus(row)} />,
+    },
+
+    {
+      header: "Actions",
+      accessor: (row) => <BidActions bid={row} />,
+    },
+  ];
+
+  if (loading) {
+    return <Loader />;
+  }
+
+  if (error) {
+    return <ErrorDisplay message={error} onRetry={handleRetry} />;
+  }
+
+  if (items.length === 0) {
+    return <NoData />;
+  }
+
+  return (
+    <Table
+      columns={columns}
+      data={items}
+      rowKey={(row) => row.bidNumber}
+      sortBy={SortBy}
+      descending={Descending}
+      onSortChange={handleSortChange}
+    />
+  );
+>>>>>>> ebca5fa44ed4cc24fcafa59f683d2f9f3534bc8a
 };
 
 export default BidTable;

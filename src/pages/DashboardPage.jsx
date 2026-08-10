@@ -24,9 +24,13 @@ const DashboardPage = () => {
 
     const items = useAppSelector(selectBidList);
 
+<<<<<<< HEAD
     const totalRecords = useAppSelector(
         (state) => state.bids.totalRecords
     );
+=======
+  const totalRecords = useAppSelector((s) => s.bids.totalRecords);
+>>>>>>> ebca5fa44ed4cc24fcafa59f683d2f9f3534bc8a
 
     const filters = useAppSelector(
         (state) => state.filters.selected
@@ -46,6 +50,7 @@ const DashboardPage = () => {
             Expired: 3,
         };
 
+<<<<<<< HEAD
         return [...items].sort((a, b) => {
             return (
                 (priority[a.status] ?? 4) -
@@ -53,12 +58,19 @@ const DashboardPage = () => {
             );
         });
     }, [items]);
+=======
+    return [...items].sort((a, b) => {
+      return (priority[a.status] ?? 4) - (priority[b.status] ?? 4);
+    });
+  }, [items]);
+>>>>>>> ebca5fa44ed4cc24fcafa59f683d2f9f3534bc8a
 
     return (
         <div>
 
             <DashboardCards />
 
+<<<<<<< HEAD
             <FilterBar />
 
             <div className="bg-white border rounded-3 shadow-sm">
@@ -140,6 +152,54 @@ const DashboardPage = () => {
 
         </div>
     );
+=======
+      <div className="bg-white border rounded-3 shadow-sm">
+        <div className="d-flex justify-content-between align-items-center p-3 border-bottom">
+          <h5 className="mb-0">All Bids ({totalRecords})</h5>
+
+          <div className="d-flex gap-2">
+            <div className="btn-group btn-group-sm">
+              <button
+                className={`btn ${view === "table" ? "btn-primary" : "btn-outline-secondary"}`}
+                onClick={() => setView("table")}
+              >
+                Table
+              </button>
+
+              <button
+                className={`btn ${
+                  view === "cards" ? "btn-primary" : "btn-outline-secondary"
+                }`}
+                onClick={() => setView("cards")}
+              >
+                Cards
+              </button>
+            </div>
+
+            <ExportExcelButton filters={filters} />
+          </div>
+        </div>
+
+        {view === "table" ? (
+          <BidTable items={sortedItems} />
+        ) : (
+          <div className="row g-3 p-3">
+            {sortedItems.map((bid) => (
+              <div
+                className="col-12 col-sm-6 col-md-4 col-lg-3"
+                key={bid.bidNumber}
+              >
+                <BidCard bid={bid} />
+              </div>
+            ))}
+          </div>
+        )}
+
+        <BidPagination />
+      </div>
+    </>
+  );
+>>>>>>> ebca5fa44ed4cc24fcafa59f683d2f9f3534bc8a
 };
 
 export default DashboardPage;
