@@ -4,121 +4,103 @@ import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 
 import { fetchBidList } from "../../api/bidApi";
-import {
-    getBidTitle,
-    getBidStatus,
-    formatDate,
-} from "../../utils/formatters";
+import { getBidStatus, formatDate } from "../../utils/formatters";
 
 const ExportExcelButton = ({ filters }) => {
-    const [exporting, setExporting] = useState(false);
+  const [exporting, setExporting] = useState(false);
 
-    const handleExport = async () => {
-        try {
-            setExporting(true);
+  const handleExport = async () => {
+    try {
+      setExporting(true);
 
-            let allBids = [];
-            let pageNumber = 1;
+      let allBids = [];
+      let pageNumber = 1;
 
-            // First request to know the total number of pages
-            const firstResponse = await fetchBidList({
-                ...filters,
-                PageNumber: 1,
-                PageSize: 100,
-            });
+      // First request to know the total number of pages
+      const firstResponse = await fetchBidList({
+        ...filters,
+        PageNumber: 1,
+        PageSize: 100,
+      });
 
-            allBids = [...(firstResponse.data || [])];
+      allBids = [...(firstResponse.data || [])];
 
-            const totalPages = firstResponse.totalPages || 1;
+      const totalPages = firstResponse.totalPages || 1;
 
-            // Fetch remaining pages
-            for (pageNumber = 2; pageNumber <= totalPages; pageNumber++) {
-                const response = await fetchBidList({
-                    ...filters,
-                    PageNumber: pageNumber,
-                    PageSize: 100,
-                });
+      // Fetch remaining pages
+      for (pageNumber = 2; pageNumber <= totalPages; pageNumber++) {
+        const response = await fetchBidList({
+          ...filters,
+          PageNumber: pageNumber,
+          PageSize: 100,
+        });
 
-                allBids = [
-                    ...allBids,
-                    ...(response.data || []),
-                ];
-            }
+        allBids = [...allBids, ...(response.data || [])];
+      }
 
-            if (allBids.length === 0) {
-                alert("No bids available to export.");
-                return;
-            }
+      if (allBids.length === 0) {
+        alert("No bids available to export.");
+        return;
+      }
 
-            // Convert all bids into Excel rows
-            const excelData = allBids.map((bid) => ({
-                "Bid Number": bid.bidNumber,
-                
-                "Department": bid.departmentName,
-                "Organisation": bid.organisationName,
-                "Location": bid.officeName,
-                "Category": bid.categoryKey,
-                "Sub Category":bid.categorySubKey,
+      // Convert all bids into Excel rows
+      const excelData = allBids.map((bid) => ({
+        "Bid Number": bid.bidNumber,
 
-                "Bid Start Date": formatDate(bid.cardStartDate),
-                "Bid End Date": formatDate(bid.cardEndDate),
+        Department: bid.departmentName,
+        Organisation: bid.organisationName,
+        Location: bid.officeName,
+        Category: bid.categoryKey,
+        "Sub Category": bid.categorySubKey,
 
-                "Status": getBidStatus(bid),
-                
-                
-            }));
+        "Bid Start Date": formatDate(bid.cardStartDate),
+        "Bid End Date": formatDate(bid.cardEndDate),
 
-            // Create worksheet
-            const worksheet = XLSX.utils.json_to_sheet(excelData);
+        Status: getBidStatus(bid),
+      }));
 
-            // Create workbook
-            const workbook = XLSX.utils.book_new();
+      // Create worksheet
+      const worksheet = XLSX.utils.json_to_sheet(excelData);
 
-            // Add worksheet
-            XLSX.utils.book_append_sheet(
-                workbook,
-                worksheet,
-                "Bids"
-            );
+      // Create workbook
+      const workbook = XLSX.utils.book_new();
 
-            // Generate Excel file
-            const excelBuffer = XLSX.write(workbook, {
-                bookType: "xlsx",
-                type: "array",
-            });
+      // Add worksheet
+      XLSX.utils.book_append_sheet(workbook, worksheet, "Bids");
 
-            // Create downloadable file
-            const blob = new Blob([excelBuffer], {
-                type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-            });
+      // Generate Excel file
+      const excelBuffer = XLSX.write(workbook, {
+        bookType: "xlsx",
+        type: "array",
+      });
 
-            saveAs(blob, "GeM_Bids.xlsx");
+      // Create downloadable file
+      const blob = new Blob([excelBuffer], {
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      });
 
-        } catch (error) {
-            console.error("Excel export failed:", error);
-            alert("Failed to export bids to Excel.");
-        } finally {
-            setExporting(false);
-        }
-    };
+      saveAs(blob, "GeM_Bids.xlsx");
+    } catch (error) {
+      console.error("Excel export failed:", error);
+      alert("Failed to export bids to Excel.");
+    } finally {
+      setExporting(false);
+    }
+  };
 
-    return (
-        <button
-            type="button"
-            className="btn btn-outline-success btn-sm"
-            onClick={handleExport}
-            disabled={exporting}
-            title="Export all bids to Excel"
-        >
-            <FaFileExcel />
+  return (
+    <button
+      type="button"
+      className="btn btn-outline-success btn-sm"
+      onClick={handleExport}
+      disabled={exporting}
+      title="Export all bids to Excel"
+    >
+      <FaFileExcel />
 
-            {exporting && (
-                <span className="ms-1">
-                    Exporting...
-                </span>
-            )}
-        </button>
-    );
+      {exporting && <span className="ms-1">Exporting...</span>}
+    </button>
+  );
 };
 
 export default ExportExcelButton;
