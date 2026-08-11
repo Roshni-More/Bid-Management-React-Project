@@ -31,7 +31,7 @@ const dashboardSlice = createSlice({
         state.error = null;
       })
       .addCase(loadDashboardStats.fulfilled, (state, action) => {
-        console.log("Dashboard Payload", action.payload);
+        // console.log("Dashboard Payload", action.payload);
 
         state.loading = false;
         state.stats = action.payload;

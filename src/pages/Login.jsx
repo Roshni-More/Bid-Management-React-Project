@@ -44,7 +44,7 @@ const Login = () => {
 
       const data = await loginUser(formData);
 
-      console.log("Login Response:", data);
+      // console.log("Login Response:", data);
 
       // Save JWT
       localStorage.setItem("accessToken", data.token);

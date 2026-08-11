@@ -11,7 +11,7 @@ const ExportExcelButton = ({ filters }) => {
     try {
       setExporting(true);
 
-            console.log("Export filters:", filters);
+            // console.log("Export filters:", filters);
 
             const response = await exportBids(filters);
 
