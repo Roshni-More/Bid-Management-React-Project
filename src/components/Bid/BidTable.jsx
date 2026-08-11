@@ -1,3 +1,4 @@
+
 import { useNavigate } from "react-router-dom";
 
 import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
@@ -36,6 +37,7 @@ const BidTable = () => {
         (state) => state.filters.selected
     );
 
+    // Handle sorting
     const handleSortChange = (sortKey) => {
         const descending =
             SortBy === sortKey ? !Descending : false;
@@ -48,10 +50,12 @@ const BidTable = () => {
         );
     };
 
+    // Retry API call
     const handleRetry = () => {
         dispatch(loadBidList());
     };
 
+    // Table columns
     const columns = [
         {
             header: "Bid Number",
@@ -86,8 +90,10 @@ const BidTable = () => {
                 return (
                     <span title={value}>
                         {words.length > 4
-                            ? `${words.slice(0, 4).join(" ")}...`
-                            : value}
+                            ? `${words
+                                  .slice(0, 4)
+                                  .join(" ")}...`
+                            : value || "-"}
                     </span>
                 );
             },
@@ -103,8 +109,10 @@ const BidTable = () => {
                 return (
                     <span title={value}>
                         {words.length > 4
-                            ? `${words.slice(0, 4).join(" ")}...`
-                            : value}
+                            ? `${words
+                                  .slice(0, 4)
+                                  .join(" ")}...`
+                            : value || "-"}
                     </span>
                 );
             },
@@ -119,8 +127,10 @@ const BidTable = () => {
                 return (
                     <span title={value}>
                         {words.length > 4
-                            ? `${words.slice(0, 4).join(" ")}...`
-                            : value}
+                            ? `${words
+                                  .slice(0, 4)
+                                  .join(" ")}...`
+                            : value || "-"}
                     </span>
                 );
             },
@@ -141,7 +151,7 @@ const BidTable = () => {
         },
 
         {
-            header: "Bid Date",
+            header: "Start Date",
             accessor: (row) => (
                 <div
                     className="d-flex align-items-center"
@@ -150,25 +160,46 @@ const BidTable = () => {
                         gap: "8px",
                     }}
                 >
-                    <span className="text-success">
+                    <span
+                        className="text-success"
+                        style={{
+                            fontWeight: 600,
+                            fontSize: "11px",
+                        }}
+                    >
                         {row.cardStartDate
                             ? formatDate(row.cardStartDate)
                             : row.bidDate
                             ? formatDate(row.bidDate)
                             : "-"}
                     </span>
+                </div>
+            ),
+            sortKey: "BidDate",
+        },
 
-                    {row.cardEndDate && (
-                        <>
-                            <span className="text-muted">
-                                →
-                            </span>
-
-                            <span className="text-danger">
-                                {formatDate(row.cardEndDate)}
-                            </span>
-                        </>
-                    )}
+        {
+            header: "End Date",
+            accessor: (row) => (
+                <div
+                    className="d-flex align-items-center"
+                    style={{
+                        whiteSpace: "nowrap",
+                        gap: "8px",
+                    }}
+                >
+                    <span
+                        className="text-warning"
+                        style={{
+                            color: "#d39e00",
+                            fontWeight: 600,
+                            fontSize: "11px",
+                        }}
+                    >
+                        {row.cardEndDate
+                            ? formatDate(row.cardEndDate)
+                            : "-"}
+                    </span>
                 </div>
             ),
             sortKey: "BidDate",
@@ -191,10 +222,12 @@ const BidTable = () => {
         },
     ];
 
+    // Loading state
     if (loading) {
         return <Loader />;
     }
 
+    // Error state
     if (error) {
         return (
             <ErrorDisplay
@@ -204,11 +237,12 @@ const BidTable = () => {
         );
     }
 
+    // No data
     if (items.length === 0) {
         return <NoData />;
     }
 
-<<<<<<< HEAD
+    // Table
     return (
         <Table
             columns={columns}
@@ -219,110 +253,7 @@ const BidTable = () => {
             onSortChange={handleSortChange}
         />
     );
-=======
-        const words = value.trim().split(/\s+/);
-
-        return (
-          <span title={value}>
-            {words.length > 4 ? `${words.slice(0, 4).join(" ")}...` : value}
-          </span>
-        );
-      },
-    },
-
-    {
-      header: "Category",
-      accessor: (row) => row.categoryKey || "-",
-    },
-
-    {
-      header: "Sub-Category",
-      accessor: (row) => row.categorySubKey || "-",
-    },
-
-    {
-      header: "Start Date",
-      accessor: (row) => (
-        <div
-          className="d-flex align-items-center"
-          style={{
-            whiteSpace: "nowrap",
-            gap: "8px",
-          }}
-        >
-          <span
-            className="text-success"
-            style={{
-              // color: "#d39e00",
-              fontWeight: 600,
-              fontSize: "11px",
-            }}
-          >
-            {row.cardStartDate ? formatDate(row.cardStartDate) : "-"}
-          </span>
-        </div>
-      ),
-      sortKey: "BidDate",
-    },
-    {
-      header: "End Date",
-      accessor: (row) => (
-        <div
-          className="d-flex align-items-center"
-          style={{
-            whiteSpace: "nowrap",
-            gap: "8px",
-          }}
-        >
-          <span
-            className="text-warning"
-            style={{
-              color: "#d39e00",
-              fontWeight: 600,
-              fontSize: "11px",
-            }}
-          >
-            {row.cardEndDate ? formatDate(row.cardEndDate) : "-"}
-          </span>
-        </div>
-      ),
-      sortKey: "BidDate",
-    },
-
-    {
-      header: "Status",
-      accessor: (row) => <BidStatus status={getBidStatus(row)} />,
-    },
-
-    {
-      header: "Actions",
-      accessor: (row) => <BidActions bid={row} />,
-    },
-  ];
-
-  if (loading) {
-    return <Loader />;
-  }
-
-  if (error) {
-    return <ErrorDisplay message={error} onRetry={handleRetry} />;
-  }
-
-  if (items.length === 0) {
-    return <NoData />;
-  }
-
-  return (
-    <Table
-      columns={columns}
-      data={items}
-      rowKey={(row) => row.bidNumber}
-      sortBy={SortBy}
-      descending={Descending}
-      onSortChange={handleSortChange}
-    />
-  );
->>>>>>> ebca5fa44ed4cc24fcafa59f683d2f9f3534bc8a
 };
 
 export default BidTable;
+
