@@ -50,7 +50,7 @@ const Login = () => {
       localStorage.setItem("accessToken", data.token);
 
       // Go to Dashboard
-      navigate("/dashboard");
+    navigate("/dashboard", { replace: true });
     } catch (error) {
       console.error("Login Error:", error);
 

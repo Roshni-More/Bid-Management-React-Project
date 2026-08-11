@@ -1,50 +1,20 @@
-import { FiMenu, FiDownload, FiSearch } from "react-icons/fi";
-import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
+import { FiMenu, FiDownload, FiSearch, FiLogOut } from "react-icons/fi";
+import { useAppDispatch } from "../../hooks/reduxHooks";
 
 import { setFilterField, setPage } from "../../features/filters/filterSlice";
-
 import { loadBidList } from "../../features/bids/bidThunk";
 
-const Header = ({ onMenuClick }) => {
+const Header = ({ onMenuClick, onLogout }) => {
   const dispatch = useAppDispatch();
-
-  // Get current search value from Redux
-  // const search = useAppSelector(
-  //   (state) => state.filters.selected.Search
-  // );
-
-  // const handleSearchChange = (e) => {
-
-  //   const value = e.target.value;
-
-  //   dispatch(
-  //     setFilterField({
-  //       field: "Search",
-  //       value: value || undefined,
-  //     })
-  //   );
-  // };
-
-  // const handleSearch = () => {
-
-  //   // Search start from first page
-  //   dispatch(setPage(1));
-
-  //   // Call API
-  //   dispatch(loadBidList());
-  // };
-
-  // const handleKeyDown = (e) => {
-
-  //   if (e.key === "Enter") {
-  //     handleSearch();
-  //   }
-  // };
 
   return (
     <header className="d-flex justify-content-between align-items-center px-3 py-1 bg-white border-bottom">
-      {/* Left */}
+
+      {/* =========================
+          LEFT
+      ========================= */}
       <div className="d-flex align-items-center">
+
         {/* Menu */}
         <FiMenu
           size={20}
@@ -56,7 +26,10 @@ const Header = ({ onMenuClick }) => {
 
         {/* Logo / Title */}
         <div className="lh-1 me-4">
-          <div className="fw-bold fs-5">GeM</div>
+
+          <div className="fw-bold fs-5">
+            GeM
+          </div>
 
           <div
             className="text-muted"
@@ -67,60 +40,42 @@ const Header = ({ onMenuClick }) => {
           >
             BID MANAGEMENT SYSTEM
           </div>
+
         </div>
 
-        {/* Search Bar */}
-        {/* <div
-          className="position-relative"
-          style={{ width: "380px" }}
-        > */}
+        {/* =========================
+            SEARCH BAR
+        ========================= */}
 
-        {/* Search Icon */}
-        {/* <FiSearch
-            style={{
-              position: "absolute",
-              left: "12px",
-              top: "50%",
-              transform: "translateY(-50%)",
-              color: "#6c757d",
-              zIndex: 2,
-            }}
-          /> */}
+        {/* Your search code can remain commented */}
 
-        {/* Input */}
-        {/* <input
-            type="text"
-            placeholder="Search Bid No, Ministry, Item..."
-            className="form-control ps-5"
-            value={search || ""}
-            onChange={handleSearchChange}
-            onKeyDown={handleKeyDown}
-            style={{
-              width: "100%",
-              height: "36px",
-              borderRadius: "20px",
-            }}
-          /> */}
-
-        {/* </div> */}
-
-        {/* Search Button */}
-        {/* <button
-          className="btn btn-primary btn-sm ms-2"
-          onClick={handleSearch}
-          style={{
-            height: "36px",
-            borderRadius: "18px",
-          }}
-        >
-          Search
-        </button> */}
       </div>
 
-      {/* Right */}
-      <button className="btn btn-light">
-        <FiDownload />
-      </button>
+
+      {/* =========================
+          RIGHT
+      ========================= */}
+      <div className="d-flex align-items-center gap-2">
+
+        {/* Download */}
+        <button
+          className="btn btn-light"
+          title="Download"
+        >
+          <FiDownload />
+        </button>
+
+        {/* Logout */}
+        <button
+          className="btn btn-light text-danger"
+          onClick={onLogout}
+          title="Logout"
+        >
+          <FiLogOut />
+        </button>
+
+      </div>
+
     </header>
   );
 };

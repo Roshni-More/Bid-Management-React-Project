@@ -1,9 +1,11 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
-import MainLayout from "./components/Layout/MainLayout";
+// import MainLayout from "./components/Layout/MainLayout";
 import DashboardPage from "./pages/DashboardPage";
 import BidDetailsPage from "./pages/BidDetailsPage";
 import Login from "./pages/Login";
+import ProtectedRoute from "./routes/ProtectedRoute";
+import MainLayout from "./components/layout/MainLayout";
 
 const App = () => {
   return (
@@ -26,9 +28,11 @@ const App = () => {
         <Route
           path="/dashboard"
           element={
-            <MainLayout>
-              <DashboardPage />
-            </MainLayout>
+            <ProtectedRoute>
+              <MainLayout>
+                <DashboardPage/>
+              </MainLayout>
+            </ProtectedRoute>
           }
         />
 
@@ -36,9 +40,11 @@ const App = () => {
         <Route
           path="/details/*"
           element={
-            <MainLayout>
-              <BidDetailsPage />
-            </MainLayout>
+            <ProtectedRoute>
+              <MainLayout>
+                <BidDetailsPage />
+              </MainLayout>
+            </ProtectedRoute>
           }
         />
 
