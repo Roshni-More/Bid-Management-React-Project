@@ -6,7 +6,7 @@ import CategoryDropdown from "./CategoryDropdown";
 import SubCategoryDropdown from "./SubCategoryDropdown";
 
 import SearchBox from "./SearchBox";
-import EvaluationMethodFilter from "./EvaluationMethodFilter";
+// import EvaluationMethodFilter from "./EvaluationMethodFilter";
 import ApplyButton from "./ApplyButton";
 import ResetButton from "./ResetButton";
 import CardStartDate from "./CardStartDate";
@@ -55,10 +55,10 @@ const FilterBar = () => {
           <CardEndDate />
         </div>
 
-        {/* EVALUATION METHOD */}
+        {/* EVALUATION METHOD
         <div className="col-6 col-md-2">
           <EvaluationMethodFilter />
-        </div>
+        </div> */}
 
         {/* MIN + MAX */}
         {/* <div className="col-6 col-md-2">
