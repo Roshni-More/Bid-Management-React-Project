@@ -1,8 +1,17 @@
 import { useNavigate } from "react-router-dom";
-import { formatDate } from "../../utils/formatters";
+
+import {
+  formatDate,
+  getBidStatus,
+} from "../../utils/formatters";
+
+import BidStatus from "./BidStatus";
 
 const BidCard = ({ bid }) => {
   const navigate = useNavigate();
+
+  // Use the SAME status logic as BidTable
+  const status = getBidStatus(bid);
 
   // Category - maximum 4 words
   const category = bid.categoryKey || "-";
@@ -36,8 +45,13 @@ const BidCard = ({ bid }) => {
       }}
     >
       <div className="card-body p-3">
-        {/* Bid Number + Status */}
+
+        {/* =========================
+            Bid Number + Status
+        ========================== */}
         <div className="d-flex justify-content-between align-items-start">
+          
+          {/* Bid Number */}
           <span
             className="text-primary fw-semibold"
             role="button"
@@ -50,18 +64,14 @@ const BidCard = ({ bid }) => {
             {bid.bidNumber}
           </span>
 
-          <span
-            className="text-muted text-nowrap ms-2"
-            style={{
-              fontSize: "10px",
-            }}
-          >
-            <span className="text-danger me-1">●</span>
-            Expired
-          </span>
+          {/* Status */}
+          <BidStatus status={status} />
+
         </div>
 
-        {/* Department + Organisation */}
+        {/* =========================
+            Department + Organisation
+        ========================== */}
         <div
           className="mt-2 text-muted"
           style={{
@@ -71,12 +81,16 @@ const BidCard = ({ bid }) => {
             minHeight: "30px",
             overflow: "hidden",
           }}
-          title={`${bid.departmentName || ""} · ${bid.organisationName || ""}`}
+          title={`${bid.departmentName || ""} · ${
+            bid.organisationName || ""
+          }`}
         >
           {bid.departmentName || "-"} · {bid.organisationName || "-"}
         </div>
 
-        {/* Category + Sub Category */}
+        {/* =========================
+            Category + Sub Category
+        ========================== */}
         <div
           className="d-flex align-items-start mt-2"
           style={{
@@ -86,6 +100,7 @@ const BidCard = ({ bid }) => {
             minWidth: 0,
           }}
         >
+
           {/* Category - LEFT */}
           <div
             className="text-start"
@@ -97,9 +112,10 @@ const BidCard = ({ bid }) => {
             }}
             title={category}
           >
-            {/* Bold label */}
-            <span className="text-muted fw-bold">Category:</span>{" "}
-            {/* Normal value */}
+            <span className="text-muted fw-bold">
+              Category:
+            </span>{" "}
+
             <span
               style={{
                 overflow: "hidden",
@@ -126,9 +142,10 @@ const BidCard = ({ bid }) => {
             }}
             title={subCategory}
           >
-            {/* Bold label */}
-            <span className="text-muted fw-bold">Sub-Category:</span>{" "}
-            {/* Normal value */}
+            <span className="text-muted fw-bold">
+              Sub-Category:
+            </span>{" "}
+
             <span
               style={{
                 overflow: "hidden",
@@ -143,9 +160,12 @@ const BidCard = ({ bid }) => {
               {displaySubCategory}
             </span>
           </div>
+
         </div>
 
-        {/* Start + End Date */}
+        {/* =========================
+            Start + End Date
+        ========================== */}
         <div
           className="d-flex justify-content-between align-items-center mt-3"
           style={{
@@ -153,6 +173,7 @@ const BidCard = ({ bid }) => {
             fontWeight: "700",
           }}
         >
+
           {/* Start Date */}
           <span className="text-success text-nowrap fw-bold">
             Start: {formatDate(bid.cardStartDate)}
@@ -162,7 +183,9 @@ const BidCard = ({ bid }) => {
           <span className="text-warning text-nowrap fw-bold">
             End: {formatDate(bid.cardEndDate)}
           </span>
+
         </div>
+
       </div>
     </div>
   );
