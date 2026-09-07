@@ -5,7 +5,7 @@ import { API_ENDPOINTS } from "../constants/apiEndpoints";
 export const fetchDashboardStats = async () => {
   const response = await axiosInstance.get(API_ENDPOINTS.DASHBOARD);
 
-  console.log(response);
+  // console.log(response);
 
   return response.data;
 };

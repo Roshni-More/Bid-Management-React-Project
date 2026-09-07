@@ -21,11 +21,18 @@ const DashboardCards = () => {
 
   const { stats, loading, error } = useAppSelector((s) => s.dashboard);
   const selected = useAppSelector((s) => s.filters.selected);
-
-  if (loading) return <Loader label="Loading Dashboard..." />;
-  if (error) return <div className="text-danger">{error}</div>;
+  if (loading) return <Loader />;
+  if (error) return <div>{error}</div>;
   if (!stats) return null;
 
+  const weeklyTotal =
+    stats.weeklyBids?.[stats.weeklyBids.length - 1]?.count ?? 0;
+
+  const monthlyTotal =
+    stats.monthlyBids?.[stats.monthlyBids.length - 1]?.count ?? 0;
+
+  const yearlyTotal =
+    stats.yearlyBids?.[stats.yearlyBids.length - 1]?.count ?? 0;
   const apply = (payload) => {
     dispatch(setStatusFilter(payload));
     dispatch(setPage(1));
@@ -36,19 +43,19 @@ const DashboardCards = () => {
   const cards = [
     {
       title: "Weekly",
-      value: stats.weeklyBids ?? 0,
+      value: weeklyTotal,
       color: "#06b6d4",
       icon: <FaCalendarWeek />,
     },
     {
       title: "Monthly",
-      value: stats.monthlyBids ?? 0,
+      value: monthlyTotal,
       color: "#7c3aed",
       icon: <FaCalendarAlt />,
     },
     {
       title: "Yearly",
-      value: stats.yearlyBids ?? 0,
+      value: yearlyTotal,
       color: "#374151",
       icon: <FaCalendar />,
     },
@@ -74,7 +81,7 @@ const DashboardCards = () => {
     {
       title: "Closing Soon",
       value: stats.closingSoon ?? 0,
-      color: "#f59e0b",
+      color: "#e9f50b",
       icon: <FaClock />,
       active: !!selected.ClosingSoon,
       payload: { closingSoon: true },
@@ -116,7 +123,7 @@ const DashboardCards = () => {
 
               <div>
                 <div
-                  className="fw-semibold text-secondary"
+                  className="fw-bold"
                   style={{
                     fontSize: "11px",
                   }}

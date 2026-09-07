@@ -13,7 +13,7 @@ const initialSelected = {
   OfficeName: undefined,
   CategoryKey: undefined,
   CategorySubKey: undefined,
-  Active: undefined,
+  Active: true,
   ClosingSoon: undefined,
   Expired: undefined,
   BidDateFrom: undefined,

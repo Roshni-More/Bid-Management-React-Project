@@ -1,7 +1,12 @@
 import axios from "axios";
 
+const API_URL =
+  window.location.hostname === "localhost"
+    ? "https://localhost:7296"
+    : "https://gemsbidapi.sdaemon.com";
+
 const axiosInstance = axios.create({
-  baseURL: "https://localhost:7296",
+  baseURL: API_URL,
   headers: {
     "Content-Type": "application/json",
   },
@@ -15,7 +20,7 @@ axiosInstance.interceptors.request.use(
       config.headers.Authorization = `Bearer ${token}`;
     }
 
-    console.log("Request URL:", config.baseURL + config.url);
+    // console.log("Request URL:", config.baseURL + config.url);
 
     return config;
   },

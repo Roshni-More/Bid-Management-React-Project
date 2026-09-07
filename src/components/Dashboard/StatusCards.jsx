@@ -41,7 +41,7 @@ const StatusCards = () => {
       title: "Closing Soon",
       count: stats?.closingSoon ?? 0,
       icon: <FaClock />,
-      color: "#f59e0b",
+      color: "#f5970b",
       active: !!selected.ClosingSoon,
       payload: { closingSoon: true },
     },

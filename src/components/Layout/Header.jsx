@@ -1,21 +1,36 @@
-import { FiMenu, FiDownload, FiSearch } from "react-icons/fi";
+import { FiMenu, FiDownload, FiSearch, FiLogOut } from "react-icons/fi";
+import { useAppDispatch } from "../../hooks/reduxHooks";
 
-const Header = ({ onMenuClick }) => {
+import { setFilterField, setPage } from "../../features/filters/filterSlice";
+import { loadBidList } from "../../features/bids/bidThunk";
+
+const Header = ({ onMenuClick, onLogout }) => {
+  const dispatch = useAppDispatch();
+
   return (
-    <header className="d-flex align-items-center justify-content-between bg-white border-bottom px-3 py-2">
+    <header className="d-flex justify-content-between align-items-center px-3 py-1 bg-white border-bottom">
 
-      {/* Left */}
+      {/* =========================
+          LEFT
+      ========================= */}
       <div className="d-flex align-items-center">
 
+        {/* Menu */}
         <FiMenu
           size={20}
           className="text-secondary me-3"
           role="button"
           onClick={onMenuClick}
+          style={{ cursor: "pointer" }}
         />
 
+        {/* Logo / Title */}
         <div className="lh-1 me-4">
-          <div className="fw-bold fs-5">GeM</div>
+
+          <div className="fw-bold fs-5">
+            GeM
+          </div>
+
           <div
             className="text-muted"
             style={{
@@ -25,38 +40,41 @@ const Header = ({ onMenuClick }) => {
           >
             BID MANAGEMENT SYSTEM
           </div>
+
         </div>
 
-        {/* Search Bar */}
-        <div className="position-relative">
-          <FiSearch
-            style={{
-              position: "absolute",
-              left: "12px",
-              top: "50%",
-              transform: "translateY(-50%)",
-              color: "#6c757d",
-            }}
-          />
+        {/* =========================
+            SEARCH BAR
+        ========================= */}
 
-          <input
-            type="text"
-            placeholder="Search Bid No, Ministry, Item..."
-            className="form-control ps-5"
-            style={{
-              width: "380px",
-              height: "36px",
-              borderRadius: "20px",
-            }}
-          />
-        </div>
+        {/* Your search code can remain commented */}
 
       </div>
 
-      {/* Right */}
-      <button className="btn btn-light">
-        <FiDownload />
-      </button>
+
+      {/* =========================
+          RIGHT
+      ========================= */}
+      <div className="d-flex align-items-center gap-2">
+
+        {/* Download */}
+        <button
+          className="btn btn-light"
+          title="Download"
+        >
+          <FiDownload />
+        </button>
+
+        {/* Logout */}
+        <button
+          className="btn btn-light text-danger"
+          onClick={onLogout}
+          title="Logout"
+        >
+          <FiLogOut />
+        </button>
+
+      </div>
 
     </header>
   );
