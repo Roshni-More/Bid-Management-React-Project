@@ -59,7 +59,11 @@ const BidTable = () => {
         <span
           className="text-primary fw-semibold"
           role="button"
-          onClick={() => navigate(`/details/${row.bidNumber}`)}
+          onClick={() =>
+        navigate(`/details/${row.bidNumber}`, {
+          state: { bid: row },
+        })
+      }
         >
           {row.bidNumber}
         </span>

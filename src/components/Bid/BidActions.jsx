@@ -46,13 +46,13 @@ const BidActions = ({ bid }) => {
     <div className="d-flex gap-2">
       <button
         className="btn btn-sm btn-outline-primary"
-        onClick={() =>
-          navigate(`/details/${bid.bidNumber}`, {
-            state: {
-              categoryKey: bid.categoryKey,
-            },
-          })
-        }
+       onClick={() =>
+  navigate(`/details/${bid.bidNumber}`, {
+    state: {
+      bid: bid,
+    },
+  })
+}
         title="View Details"
       >
         <FiEye />

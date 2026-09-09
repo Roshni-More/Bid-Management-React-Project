@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate,useLocation  } from "react-router-dom";
 
 import { useAppDispatch, useAppSelector } from "../hooks/reduxHooks";
 
@@ -14,31 +14,38 @@ import {
 
 import Loader from "../components/Common/Loader";
 import ErrorDisplay from "../components/Common/ErrorDisplay";
-
-import { formatDate, formatDateTime } from "../utils/formatters";
+import {
+  formatDate,
+  formatDateTime,
+  getBidStatus,
+} from "../utils/formatters";
 
 const BidDetailsPage = () => {
   const params = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
   const dispatch = useAppDispatch();
+  const bidFromTable = location.state?.bid;
 
   // Bid number contains /
   // Example: GEM/2026/B/7806411
   const bidNumber = params["*"];
 
-  const bid = useAppSelector(selectSelectedBid);
+  const selectedBid = useAppSelector(selectSelectedBid);
+
+const bid = bidFromTable || selectedBid;
   const loading = useAppSelector(selectBidDetailLoading);
   const error = useAppSelector(selectBidDetailError);
 
   useEffect(() => {
-    if (bidNumber) {
-      dispatch(loadBidDetail(bidNumber));
-    }
+  if (!bidFromTable && bidNumber) {
+    dispatch(loadBidDetail(bidNumber));
+  }
 
-    return () => {
-      dispatch(clearSelectedBid());
-    };
-  }, [bidNumber, dispatch]);
+  return () => {
+    dispatch(clearSelectedBid());
+  };
+}, [bidNumber, bidFromTable, dispatch]);
 
   const handleRetry = () => {
     if (bidNumber) {
@@ -70,51 +77,55 @@ const BidDetailsPage = () => {
   // =====================================================
 
   const rows = [
-    {
-      label: "Bid No",
-      value: bid.bidNumber,
-    },
+  {
+    label: "Bid No",
+    value: bid.bidNumber,
+  },
 
-    {
-      label: "Department",
-      value: bid.departmentName,
-    },
+  {
+    label: "Department",
+    value: bid.departmentName,
+  },
 
-    {
-      label: "Organization",
-      value: bid.organisationName,
-    },
+  {
+    label: "Organization",
+    value: bid.organisationName,
+  },
 
-    {
-      label: "Location",
-      value: bid.officeName,
-    },
+  {
+    label: "Location",
+    value: bid.officeName,
+  },
 
-    {
-      label: "Category",
-      value: bid.category || bid.categoryKey,
-    },
+  {
+    label: "Category",
+    value: bid.categoryKey,
+  },
 
-    {
-      label: "Subcategory",
-      value: bid.categorySubKey || bid.itemCategory,
-    },
+  {
+    label: "Subcategory",
+    value: bid.categorySubKey,
+  },
 
-    {
-      label: "Bid Start Date",
-      value: bid.bidDate ? formatDate(bid.bidDate) : "-",
-    },
+  {
+    label: "Bid Start Date",
+    value: bid.cardStartDate
+      ? formatDate(bid.cardStartDate)
+      : "-",
+  },
 
-    {
-      label: "Bid End Date",
-      value: bid.bidEndDateTime ? formatDateTime(bid.bidEndDateTime) : "-",
-    },
+  {
+    label: "Bid End Date",
+    value: bid.cardEndDate
+      ? formatDate(bid.cardEndDate)
+      : "-",
+  },
 
-    {
-      label: "Status",
-      value: bid.status || "Closing Soon",
-    },
-  ];
+  {
+    label: "Status",
+    value: getBidStatus(bid),
+  },
+];
 
   return (
     <div className="container-fluid py-3">

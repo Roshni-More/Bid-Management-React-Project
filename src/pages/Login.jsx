@@ -370,7 +370,7 @@ const Login = () => {
                   padding: "0",
                 }}
               >
-                {showPassword ? "🙈" : "👁️"}
+                {showPassword ? "❌" : "👁️"}
               </button>
 
             </div>
