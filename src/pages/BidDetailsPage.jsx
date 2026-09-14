@@ -171,7 +171,7 @@ const bid = bidFromTable || selectedBid;
                 rel="noopener noreferrer"
                 className="btn btn-primary"
               >
-                View Bid Document
+                Download Document
               </a>
             </div>
           )}

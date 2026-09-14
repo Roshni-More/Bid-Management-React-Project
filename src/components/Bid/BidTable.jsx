@@ -104,7 +104,7 @@ const BidTable = () => {
     {
       header: "Location",
       accessor: (row) => {
-        const value = row.officeName || "";
+         const value = row.consigneeName || "";
 
         const words = value.trim().split(/\s+/);
 

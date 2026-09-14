@@ -10,7 +10,7 @@ const initialSelected = {
   Ministry: undefined,
   DepartmentName: undefined,
   OrganisationName: undefined,
-  OfficeName: undefined,
+ ConsigneeName: undefined,
   CategoryKey: undefined,
   CategorySubKey: undefined,
   Active: true,
@@ -55,14 +55,14 @@ const filterSlice = createSlice({
       if (field === "Ministry") {
         state.selected.DepartmentName = undefined;
         state.selected.OrganisationName = undefined;
-        state.selected.OfficeName = undefined;
+      state.selected.ConsigneeName = undefined;
       }
       if (field === "DepartmentName") {
         state.selected.OrganisationName = undefined;
-        state.selected.OfficeName = undefined;
+         state.selected.ConsigneeName = undefined;
       }
       if (field === "OrganisationName") {
-        state.selected.OfficeName = undefined;
+        state.selected.ConsigneeName = undefined;
       }
       if (field === "CategoryKey") {
         state.selected.CategorySubKey = undefined;
