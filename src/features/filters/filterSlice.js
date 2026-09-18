@@ -29,7 +29,7 @@ const initialSelected = {
   EvaluationMethod: undefined,
   MSEPurchasePreference: undefined,
   MIIPurchasePreference: undefined,
-  SortBy: "BidEndDateTime",
+  SortBy: "recentlyupdated",
   Descending: false,
   PageNumber: DEFAULT_PAGE_NUMBER,
   PageSize: DEFAULT_PAGE_SIZE,

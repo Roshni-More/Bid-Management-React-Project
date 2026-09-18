@@ -46,6 +46,7 @@ const BidTable = () => {
         descending,
       }),
     );
+    dispatch(loadBidList());
   };
 
   const handleRetry = () => {
