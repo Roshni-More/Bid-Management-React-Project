@@ -50,13 +50,13 @@ const Login = () => {
       localStorage.setItem("accessToken", data.token);
 
       // Go to Dashboard
-    navigate("/dashboard", { replace: true });
+      navigate("/dashboard", { replace: true });
     } catch (error) {
       console.error("Login Error:", error);
 
       setError(
         error.response?.data?.message ||
-          "Invalid email or password."
+        "Invalid email or password."
       );
     } finally {
       setLoading(false);
@@ -72,18 +72,16 @@ const Login = () => {
         overflow: "hidden",
 
         /* GeM Background */
-        backgroundImage: "url('/gem-login-bg.png')",
+        backgroundImage: "url('/E-Tender-Background.png')",
         backgroundSize: "100% 100%",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
 
         /* Login Card Position */
         display: "flex",
-        justifyContent: "flex-end",
+        justifyContent: "center",
         alignItems: "center",
-
-        paddingRight: "5%",
-        paddingLeft: "20px",
+        padding: "20px",
       }}
     >
 
@@ -92,23 +90,26 @@ const Login = () => {
       ========================================= */}
       <div
         className="shadow"
+
         style={{
           width: "480px",
           maxWidth: "90vw",
 
-          background: "rgba(255, 255, 255, 0.97)",
+          /* Light transparent login card */
+          background: "rgba(255, 255, 255, 0.78)",
+          backdropFilter: "blur(10px)",
+          WebkitBackdropFilter: "blur(10px)",
 
+          border: "1px solid rgba(255, 255, 255, 0.65)",
           borderRadius: "14px",
 
           padding: "40px 42px",
-
-          marginRight: "2%",
 
           position: "relative",
           zIndex: 2,
 
           boxShadow:
-            "0 15px 40px rgba(0, 0, 0, 0.18)",
+            "0 15px 40px rgba(0, 0, 0, 0.12)",
         }}
       >
 
@@ -381,7 +382,7 @@ const Login = () => {
           {/* =====================================
               REMEMBER + FORGOT
           ===================================== */}
-         
+
 
 
           {/* =====================================
@@ -425,19 +426,19 @@ const Login = () => {
         {/* =========================================
             OR DIVIDER
         ========================================= */}
-       
+
 
 
         {/* =========================================
             GEM SECURE
         ========================================= */}
-       
+
 
 
         {/* =========================================
             REGISTER
         ========================================= */}
-        
+
 
       </div>
 
