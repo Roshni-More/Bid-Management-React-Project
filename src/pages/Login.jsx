@@ -1,6 +1,13 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { loginUser } from "../api/authApi";
+import {
+  Mail,
+  Lock,
+  Eye,
+  EyeOff,
+  ArrowRight
+} from "lucide-react";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -14,9 +21,6 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
-  // =========================
-  // Handle Input Change
-  // =========================
   const handleChange = (e) => {
     const { name, value } = e.target;
 
@@ -26,9 +30,6 @@ const Login = () => {
     }));
   };
 
-  // =========================
-  // Handle Login
-  // =========================
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -44,234 +45,216 @@ const Login = () => {
 
       const data = await loginUser(formData);
 
-      // console.log("Login Response:", data);
-
-      // Save JWT
       localStorage.setItem("accessToken", data.token);
 
-      // Go to Dashboard
-      navigate("/dashboard", { replace: true });
+      navigate("/dashboard", {
+        replace: true,
+      });
     } catch (error) {
       console.error("Login Error:", error);
 
       setError(
         error.response?.data?.message ||
-        "Invalid email or password."
+          "Invalid email or password."
       );
     } finally {
       setLoading(false);
     }
   };
 
-  return (
+ return (
+  <div className="relative min-h-screen w-full overflow-hidden items-center justify-end px-25 py-8">
+    {/* <div className="relative z-10 flex min-h-screen items-center justify-end px-25 py-8"> */}
+
+    {/* ================= VIDEO BACKGROUND ================= */}
+    <video
+      className="absolute inset-0 h-full w-full object-cover"
+      autoPlay
+      loop
+      muted
+      playsInline
+    >
+      <source src="/login-background.mp4" type="video/mp4" />
+    </video>
+
+    {/* Background overlay */}
+    <div className="absolute inset-0 bg-black/20" />
+{/* ================= LEFT SIDE BRANDING ================= */}
+<div className="absolute left-0 top-1/2 z-20 flex w-1/2 -translate-y-1/2 justify-center">
+  
+  <div className="text-center text-white">
+
+    {/* Logo */}
+    <div className="mb-4 flex justify-center">
+      <img
+        src="/logo.png"
+        alt="Sdaemon Infotech"
+        className="h-40 w-auto object-contain"
+      />
+    </div>
+
+    {/* Company Name */}
+    <p className="text-sm font-semibold tracking-wide text-white/90">
+      Sdaemon Infotech Pvt. Ltd.
+    </p>
+
+    {/* Portal Name */}
+    <h1 className="text-3xl font-semibold leading-tight tracking-tight">
+      E-Tender Portal
+    </h1>
+
+    {/* GeM Bids */}
+    <p className="mt-1 text-xl font-bold text-yellow-400">
+      GeM Bids Management
+    </p>
+
+  </div>
+
+</div>
+
+
+    {/* ================= RIGHT LOGIN ================= */}
     <div
-      style={{
-        minHeight: "100vh",
-        width: "100%",
-        position: "relative",
-        overflow: "hidden",
+      className="
+        relative
+        z-20
+        flex
+        min-h-screen
+        items-center
+        justify-center
+        px-5
 
-        /* GeM Background */
-        backgroundImage: "url('/E-Tender-Background.png')",
-        backgroundSize: "100% 100%",
-        backgroundPosition: "center",
-        backgroundRepeat: "no-repeat",
+        lg:justify-end
+        lg:pr-10
 
-        /* Login Card Position */
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        padding: "20px",
-      }}
+        xl:pr-16
+      "
     >
 
-      {/* =========================================
-          LOGIN CARD
-      ========================================= */}
+      {/* ================= GLASS CARD ================= */}
       <div
-        className="shadow"
+  className="
+    w-full
+    max-w-md
+    rounded-3xl
+    border
+    border-white/40
+    bg-white/20
+    px-8
+    py-7
+    shadow-2xl
+    backdrop-blur-2xl
+    backdrop-saturate-150
+    animate-login-slide
+  "
+>
 
-        style={{
-          width: "480px",
-          maxWidth: "90vw",
+        {/* ================= LOGO ================= */}
+        <div className="mb-4 flex justify-center">
 
-          /* Light transparent login card */
-          background: "rgba(255, 255, 255, 0.78)",
-          backdropFilter: "blur(10px)",
-          WebkitBackdropFilter: "blur(10px)",
-
-          border: "1px solid rgba(255, 255, 255, 0.65)",
-          borderRadius: "14px",
-
-          padding: "40px 42px",
-
-          position: "relative",
-          zIndex: 2,
-
-          boxShadow:
-            "0 15px 40px rgba(0, 0, 0, 0.12)",
-        }}
-      >
-
-        {/* =========================================
-            HEADER
-        ========================================= */}
-        <div
-          style={{
-            textAlign: "center",
-            marginBottom: "30px",
-          }}
-        >
-
-          {/* User Icon */}
           <div
-            style={{
-              width: "68px",
-              height: "68px",
+            className="
+              flex
+              h-20
+              w-20
+              items-center
+              justify-center
 
-              borderRadius: "50%",
+              rounded-full
 
-              background: "#f1f7fc",
+              border
+              border-white/50
 
-              border: "1px solid #dce8f2",
+              bg-white/25
 
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
+              p-3
 
-              margin: "0 auto 18px",
-
-              fontSize: "28px",
-            }}
+              shadow-lg
+            "
           >
-            👤
+            <img
+              src="/logo.png"
+              alt="Sdaemon"
+              className="h-full w-full object-contain"
+            />
           </div>
 
-          {/* Welcome */}
-          <h2
-            style={{
-              margin: 0,
-              marginBottom: "8px",
+        </div>
 
-              color: "#12375d",
 
-              fontSize: "32px",
+        {/* ================= TITLE ================= */}
+        <div className="mb-6 text-center">
 
-              fontWeight: "700",
-            }}
-          >
+          <h2 className="text-3xl font-bold tracking-wide text-white">
             Welcome Back
           </h2>
 
-          {/* Subtitle */}
-          <p
-            style={{
-              margin: 0,
-
-              color: "#64748b",
-
-              fontSize: "15px",
-            }}
-          >
+          <p className="mt-1.5 text-sm text-white/80">
             Login to your GeM BIDS account
           </p>
 
         </div>
 
 
-        {/* =========================================
-            ERROR
-        ========================================= */}
-        {error && (
-          <div
-            className="alert alert-danger"
-            style={{
-              fontSize: "14px",
-              padding: "10px 12px",
-              marginBottom: "20px",
-            }}
-          >
-            {error}
-          </div>
-        )}
-
-
-        {/* =========================================
-            FORM
-        ========================================= */}
+        {/* ================= FORM ================= */}
         <form onSubmit={handleSubmit}>
 
-          {/* =====================================
-              EMAIL
-          ===================================== */}
-          <div style={{ marginBottom: "20px" }}>
+          {/* EMAIL */}
+          <div className="mb-4">
 
-            <label
-              style={{
-                display: "block",
-
-                marginBottom: "8px",
-
-                color: "#172b4d",
-
-                fontSize: "14px",
-
-                fontWeight: "600",
-              }}
-            >
+            <label className="mb-1.5 block text-sm font-semibold text-white">
               Email
             </label>
 
+            <div className="relative">
 
-            <div
-              style={{
-                height: "54px",
+              <Mail
+                size={20}
+                className="
+                  absolute
+                  left-4
+                  top-1/2
+                  -translate-y-1/2
+                  text-white/75
+                "
+              />
 
-                display: "flex",
-
-                alignItems: "center",
-
-                border: "1px solid #cbd5e1",
-
-                borderRadius: "8px",
-
-                background: "#ffffff",
-
-                padding: "0 14px",
-              }}
-            >
-
-              {/* Icon */}
-              <span
-                style={{
-                  fontSize: "17px",
-                  marginRight: "10px",
-                }}
-              >
-                👤
-              </span>
-
-
-              {/* Input */}
               <input
                 type="email"
                 name="email"
                 placeholder="Enter your email"
                 value={formData.email}
                 onChange={handleChange}
-                style={{
-                  width: "100%",
-                  height: "100%",
+                required
+                className="
+                  w-full
+                  rounded-xl
 
-                  border: "none",
-                  outline: "none",
+                  border
+                  border-white/40
 
-                  fontSize: "15px",
+                  bg-white/20
 
-                  color: "#172b4d",
+                  py-3
+                  pl-11
+                  pr-4
 
-                  background: "transparent",
-                }}
+                  text-sm
+                  text-white
+
+                  placeholder-white/60
+
+                  outline-none
+
+                  backdrop-blur-md
+
+                  transition-all
+
+                  focus:border-white
+                  focus:bg-white/30
+                  focus:ring-2
+                  focus:ring-white/20
+                "
               />
 
             </div>
@@ -279,99 +262,81 @@ const Login = () => {
           </div>
 
 
-          {/* =====================================
-              PASSWORD
-          ===================================== */}
-          <div style={{ marginBottom: "15px" }}>
+          {/* PASSWORD */}
+          <div className="mb-5">
 
-            <label
-              style={{
-                display: "block",
-
-                marginBottom: "8px",
-
-                color: "#172b4d",
-
-                fontSize: "14px",
-
-                fontWeight: "600",
-              }}
-            >
+            <label className="mb-1.5 block text-sm font-semibold text-white">
               Password
             </label>
 
+            <div className="relative">
 
-            <div
-              style={{
-                height: "54px",
+              <Lock
+                size={20}
+                className="
+                  absolute
+                  left-4
+                  top-1/2
+                  -translate-y-1/2
+                  text-white/75
+                "
+              />
 
-                display: "flex",
-
-                alignItems: "center",
-
-                border: "1px solid #cbd5e1",
-
-                borderRadius: "8px",
-
-                background: "#ffffff",
-
-                padding: "0 14px",
-              }}
-            >
-
-              {/* Lock Icon */}
-              <span
-                style={{
-                  fontSize: "17px",
-                  marginRight: "10px",
-                }}
-              >
-                🔒
-              </span>
-
-
-              {/* Password Input */}
               <input
                 type={showPassword ? "text" : "password"}
                 name="password"
                 placeholder="Enter your password"
                 value={formData.password}
                 onChange={handleChange}
-                style={{
-                  width: "100%",
-                  height: "100%",
+                required
+                className="
+                  w-full
+                  rounded-xl
 
-                  border: "none",
-                  outline: "none",
+                  border
+                  border-white/40
 
-                  fontSize: "15px",
+                  bg-white/20
 
-                  color: "#172b4d",
+                  py-3
+                  pl-11
+                  pr-12
 
-                  background: "transparent",
-                }}
+                  text-sm
+                  text-white
+
+                  placeholder-white/60
+
+                  outline-none
+
+                  backdrop-blur-md
+
+                  transition-all
+
+                  focus:border-white
+                  focus:bg-white/30
+                  focus:ring-2
+                  focus:ring-white/20
+                "
               />
 
-
-              {/* Show Password */}
               <button
                 type="button"
-                onClick={() =>
-                  setShowPassword(!showPassword)
-                }
-                style={{
-                  border: "none",
-
-                  background: "transparent",
-
-                  cursor: "pointer",
-
-                  fontSize: "16px",
-
-                  padding: "0",
-                }}
+                onClick={() => setShowPassword(!showPassword)}
+                className="
+                  absolute
+                  right-4
+                  top-1/2
+                  -translate-y-1/2
+                  text-white/75
+                  hover:text-white
+                "
               >
-                {showPassword ? "❌" : "👁️"}
+                {showPassword ? (
+                  <EyeOff size={20} />
+                ) : (
+                  <Eye size={20} />
+                )}
               </button>
 
             </div>
@@ -379,71 +344,118 @@ const Login = () => {
           </div>
 
 
-          {/* =====================================
-              REMEMBER + FORGOT
-          ===================================== */}
+          {/* ERROR */}
+          {error && (
+            <div
+              className="
+                mb-4
+                rounded-lg
+                border
+                border-red-300/30
+                bg-red-500/20
+                px-3
+                py-2
+                text-sm
+                text-red-100
+              "
+            >
+              {error}
+            </div>
+          )}
 
 
-
-          {/* =====================================
-              LOGIN BUTTON
-          ===================================== */}
+          {/* LOGIN BUTTON */}
           <button
             type="submit"
             disabled={loading}
-            style={{
-              width: "100%",
+            className="
+              group
+              relative
+              flex
+              w-full
+              items-center
+              justify-center
+              gap-2
 
-              height: "54px",
+              overflow-hidden
+              rounded-xl
 
-              border: "none",
+              bg-gradient-to-r
+              from-blue-500
+              to-blue-700
 
-              borderRadius: "8px",
+              py-3
 
-              background: "#075487",
+              text-base
+              font-semibold
+              text-white
 
-              color: "#ffffff",
+              shadow-lg
 
-              fontSize: "17px",
+              transition-all
+              duration-300
 
-              fontWeight: "600",
+              hover:-translate-y-0.5
+              hover:shadow-xl
+              hover:shadow-blue-500/30
 
-              cursor: loading
-                ? "not-allowed"
-                : "pointer",
-
-              opacity: loading ? 0.7 : 1,
-
-              transition: "0.2s",
-            }}
+              disabled:cursor-not-allowed
+              disabled:opacity-60
+            "
           >
-            {loading ? "Logging in..." : "Login"}
+
+            <span className="relative z-10">
+              {loading ? "Logging in..." : "Login"}
+            </span>
+
+            {!loading && (
+              <ArrowRight
+                size={19}
+                className="
+                  relative
+                  z-10
+                  transition-transform
+                  duration-300
+                  group-hover:translate-x-1
+                "
+              />
+            )}
+
+            {/* Button shine */}
+            <span
+              className="
+                absolute
+                inset-y-0
+                -left-20
+                w-16
+                rotate-12
+                bg-white/40
+                blur-md
+
+                transition-all
+                duration-700
+
+                group-hover:left-[120%]
+              "
+            />
+
           </button>
 
         </form>
 
 
-        {/* =========================================
-            OR DIVIDER
-        ========================================= */}
+        {/* ================= FOOTER ================= */}
+        <div className="mt-5 text-center">
 
-
-
-        {/* =========================================
-            GEM SECURE
-        ========================================= */}
-
-
-
-        {/* =========================================
-            REGISTER
-        ========================================= */}
-
+         
+        </div>
 
       </div>
 
     </div>
-  );
+</div>
+  // </div>
+);
 };
 
 export default Login;

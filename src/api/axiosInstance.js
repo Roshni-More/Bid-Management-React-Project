@@ -10,7 +10,10 @@ const axiosInstance = axios.create({
   headers: {
     "Content-Type": "application/json",
   },
-  timeout: 20000,
+  timeout: 60000,
+  paramsSerializer:{
+    indexes:null,
+  },
 });
 
 axiosInstance.interceptors.request.use(

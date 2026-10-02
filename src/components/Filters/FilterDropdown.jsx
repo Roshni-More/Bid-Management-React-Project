@@ -7,6 +7,7 @@ const FilterDropdown = ({
   onChange,
   loading,
   disabled,
+  multiple = false,
 }) => {
   const [open, setOpen] = useState(false);
   const [searchText, setSearchText] = useState("");
@@ -14,7 +15,6 @@ const FilterDropdown = ({
   const dropdownRef = useRef(null);
   const inputRef = useRef(null);
 
-  // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (
@@ -33,7 +33,7 @@ const FilterDropdown = ({
     };
   }, []);
 
-  // Convert options to a common format
+  // Normalize backend options
   const normalizedOptions = (options || []).map((opt) => ({
     name:
       typeof opt === "string"
@@ -45,16 +45,19 @@ const FilterDropdown = ({
         : opt?.count ?? null,
   }));
 
-  // Filter options according to typed text
+  // Search
   const filteredOptions = normalizedOptions.filter((option) =>
     option.name
       .toLowerCase()
       .includes(searchText.toLowerCase())
   );
 
-  const selectedOption = normalizedOptions.find(
-    (option) => option.name === value
-  );
+  // Multiple selected values
+  const selectedValues = multiple
+    ? Array.isArray(value)
+      ? value
+      : []
+    : [];
 
   const handleOpen = () => {
     if (disabled || loading) return;
@@ -68,10 +71,55 @@ const FilterDropdown = ({
   };
 
   const handleSelect = (name) => {
-    onChange(name || undefined);
-    setOpen(false);
+    if (!multiple) {
+      onChange(name || undefined);
+      setOpen(false);
+      setSearchText("");
+      return;
+    }
+
+    const currentValues = Array.isArray(value)
+      ? value
+      : [];
+
+    let newValues;
+
+    if (currentValues.includes(name)) {
+      // Remove if already selected
+      newValues = currentValues.filter(
+        (item) => item !== name
+      );
+    } else {
+      // Add new location
+      newValues = [
+        ...currentValues,
+        name,
+      ];
+    }
+
+    onChange(newValues);
+
+    // IMPORTANT:
+    // Keep dropdown open for multiple selection
+    setOpen(true);
     setSearchText("");
   };
+
+  const handleClearAll = () => {
+    if (multiple) {
+      onChange([]);
+    } else {
+      onChange(undefined);
+    }
+
+    setSearchText("");
+  };
+
+  const displayValue = multiple
+    ? selectedValues.length === 0
+      ? ""
+      : selectedValues.join(", ")
+    : value || "";
 
   return (
     <div
@@ -89,7 +137,7 @@ const FilterDropdown = ({
         {label}
       </label>
 
-      {/* Main searchable input */}
+      {/* Search / Selected values box */}
       <div
         className="form-control form-control-sm d-flex align-items-center"
         onClick={handleOpen}
@@ -104,16 +152,13 @@ const FilterDropdown = ({
             disabled || loading
               ? "#e9ecef"
               : "#fff",
+          overflow: "hidden",
         }}
       >
         <input
           ref={inputRef}
           type="text"
-          value={
-            open
-              ? searchText
-              : selectedOption?.name || ""
-          }
+          value={open ? searchText : displayValue}
           placeholder={
             loading
               ? "Loading..."
@@ -136,10 +181,10 @@ const FilterDropdown = ({
             width: "100%",
             fontSize: "14px",
             background: "transparent",
+            minWidth: 0,
           }}
         />
 
-        {/* Dropdown arrow */}
         <span
           style={{
             fontSize: "12px",
@@ -150,7 +195,7 @@ const FilterDropdown = ({
         </span>
       </div>
 
-      {/* Dropdown options */}
+      {/* Dropdown */}
       {open && !disabled && !loading && (
         <div
           className="position-absolute bg-white border rounded shadow-sm w-100"
@@ -162,42 +207,64 @@ const FilterDropdown = ({
             left: 0,
           }}
         >
-          {/* All option */}
+
+          {/* Clear / All */}
           <div
             className="px-3 py-2"
-            onClick={() => handleSelect("")}
+            onClick={handleClearAll}
             style={{
               cursor: "pointer",
               fontSize: "14px",
+              borderBottom: "1px solid #eee",
+              fontWeight: "500",
             }}
           >
             All {label}
           </div>
 
-          {/* Filtered options */}
+          {/* Options */}
           {filteredOptions.length > 0 ? (
-            filteredOptions.map((option, index) => (
-              <div
-                key={`${option.name}-${index}`}
-                className="px-3 py-2"
-                onClick={() =>
-                  handleSelect(option.name)
-                }
-                style={{
-                  cursor: "pointer",
-                  fontSize: "14px",
-                  backgroundColor:
-                    option.name === value
-                      ? "#f1f3f5"
-                      : "white",
-                }}
-              >
-                {option.name}
+            filteredOptions.map((option, index) => {
+              const isSelected = multiple
+                ? selectedValues.includes(option.name)
+                : option.name === value;
 
-                {option.count !== null &&
-                  ` (${option.count})`}
-              </div>
-            ))
+              return (
+                <div
+                  key={`${option.name}-${index}`}
+                  className="px-3 py-2 d-flex align-items-center"
+                  onClick={() =>
+                    handleSelect(option.name)
+                  }
+                  style={{
+                    cursor: "pointer",
+                    fontSize: "14px",
+                    backgroundColor: isSelected
+                      ? "#e9f2ff"
+                      : "white",
+                  }}
+                >
+                  {/* Checkbox for multiple */}
+                  {multiple && (
+                    <input
+                      type="checkbox"
+                      checked={isSelected}
+                      readOnly
+                      style={{
+                        marginRight: "8px",
+                      }}
+                    />
+                  )}
+
+                  <span>
+                    {option.name}
+
+                    {option.count !== null &&
+                      ` (${option.count})`}
+                  </span>
+                </div>
+              );
+            })
           ) : (
             <div
               className="px-3 py-2 text-muted"

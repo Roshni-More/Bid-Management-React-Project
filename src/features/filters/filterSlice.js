@@ -10,7 +10,9 @@ const initialSelected = {
   Ministry: undefined,
   DepartmentName: undefined,
   OrganisationName: undefined,
- ConsigneeName: undefined,
+  ConsigneeName: undefined,
+  Location: undefined,
+  Locations: [],
   CategoryKey: undefined,
   CategorySubKey: undefined,
   Active: true,
@@ -20,7 +22,7 @@ const initialSelected = {
   BidDateTo: undefined,
   ClosingDateFrom: undefined,
   ClosingDateTo: undefined,
-   CardStartDate: undefined,
+  CardStartDate: undefined,
   CardEndDate: undefined,
   MinEstimatedValue: undefined,
   MaxEstimatedValue: undefined,
@@ -36,7 +38,7 @@ const initialSelected = {
 };
 
 const initialState = {
-  options: null, // FilterDto: { ministries, departments, organisations, offices, categories, status }
+  options: null,
   optionsLoading: false,
   optionsError: null,
   selected: { ...initialSelected },
@@ -46,20 +48,18 @@ const filterSlice = createSlice({
   name: "filters",
   initialState,
   reducers: {
-    // Updates Redux instantly — used for every keystroke/dropdown pick before Apply
     setFilterField: (state, action) => {
       const { field, value } = action.payload;
       state.selected[field] = value;
 
-      // Cascading reset — clearing child selections when a parent changes
       if (field === "Ministry") {
         state.selected.DepartmentName = undefined;
         state.selected.OrganisationName = undefined;
-      state.selected.ConsigneeName = undefined;
+        state.selected.ConsigneeName = undefined;
       }
       if (field === "DepartmentName") {
         state.selected.OrganisationName = undefined;
-         state.selected.ConsigneeName = undefined;
+        state.selected.ConsigneeName = undefined;
       }
       if (field === "OrganisationName") {
         state.selected.ConsigneeName = undefined;
@@ -68,6 +68,36 @@ const filterSlice = createSlice({
         state.selected.CategorySubKey = undefined;
       }
     },
+
+    toggleLocationFilter: (state, action) => {
+      const location = action.payload;
+      if (!state.selected.Locations) {
+        state.selected.Locations = [];
+      }
+      const index = state.selected.Locations.indexOf(location);
+      if (index > -1) {
+        state.selected.Locations.splice(index, 1);
+      } else {
+        state.selected.Locations.push(location);
+      }
+      state.selected.PageNumber = DEFAULT_PAGE_NUMBER;
+    },
+
+    removeLocationFilter: (state, action) => {
+      const location = action.payload;
+      if (state.selected.Locations) {
+        state.selected.Locations = state.selected.Locations.filter(
+          (l) => l !== location
+        );
+      }
+      state.selected.PageNumber = DEFAULT_PAGE_NUMBER;
+    },
+
+    clearLocations: (state) => {
+      state.selected.Locations = [];
+      state.selected.PageNumber = DEFAULT_PAGE_NUMBER;
+    },
+
     setPage: (state, action) => {
       state.selected.PageNumber = action.payload;
     },
@@ -85,8 +115,6 @@ const filterSlice = createSlice({
       state.selected.Expired = action.payload.expired;
       state.selected.PageNumber = DEFAULT_PAGE_NUMBER;
     },
-    // Called whenever /api/GeMBids returns — its embedded `filters` field
-    // keeps dropdown counts and status counts in sync with the latest result set.
     syncOptionsFromBidResponse: (state, action) => {
       state.options = action.payload;
     },
@@ -113,6 +141,9 @@ const filterSlice = createSlice({
 
 export const {
   setFilterField,
+  toggleLocationFilter,
+  removeLocationFilter,
+  clearLocations,
   setPage,
   setPageSize,
   setSort,

@@ -16,13 +16,13 @@ const Header = ({ onMenuClick, onLogout }) => {
       <div className="d-flex align-items-center">
 
         {/* Menu */}
-        <FiMenu
+        {/* <FiMenu
           size={20}
           className="text-secondary me-3"
           role="button"
           onClick={onMenuClick}
           style={{ cursor: "pointer" }}
-        />
+        /> */}
 
         {/* Logo / Title */}
         <div className="lh-1 me-4">
@@ -58,12 +58,12 @@ const Header = ({ onMenuClick, onLogout }) => {
       <div className="d-flex align-items-center gap-2">
 
         {/* Download */}
-        <button
+        {/* <button
           className="btn btn-light"
           title="Download"
         >
           <FiDownload />
-        </button>
+        </button> */}
 
         {/* Logout */}
         <button

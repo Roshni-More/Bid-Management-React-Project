@@ -103,19 +103,21 @@ const BidTable = () => {
     },
 
     {
-      header: "Location",
-      accessor: (row) => {
-         const value = row.consigneeName || "";
+  header: "Location",
+  accessor: (row) => {
+    const value = row.location ||row.consigneeName|| "-";
 
-        const words = value.trim().split(/\s+/);
+    const words = value.trim().split(/\s+/);
 
-        return (
-          <span title={value}>
-            {words.length > 4 ? `${words.slice(0, 4).join(" ")}...` : value}
-          </span>
-        );
-      },
-    },
+    return (
+      <span title={value}>
+        {words.length > 4
+          ? `${words.slice(0, 4).join(" ")}...`
+          : value}
+      </span>
+    );
+  },
+},
 
     {
       header: "Category",

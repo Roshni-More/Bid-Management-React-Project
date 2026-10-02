@@ -92,14 +92,18 @@ const bid = bidFromTable || selectedBid;
     value: bid.organisationName,
   },
 
-  {
-  label: "Location",
-  value: bid.consigneeName,
-},
+   {
+    label: "Location",
+    value: bid.location,
+  },
   {
     label: "Category",
     value: bid.categoryKey,
   },
+  {
+  label: "Item Category",
+  value: bid.itemCategory,
+},
 
   {
     label: "Subcategory",
