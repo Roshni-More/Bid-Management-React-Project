@@ -1,12 +1,14 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import "../styles/Login.css";
 import { loginUser } from "../api/authApi";
+
 import {
   Mail,
   Lock,
   Eye,
   EyeOff,
-  ArrowRight
+  ArrowRight,
 } from "lucide-react";
 
 const Login = () => {
@@ -21,6 +23,10 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
+  // =====================================================
+  // HANDLE INPUT CHANGE
+  // =====================================================
+
   const handleChange = (e) => {
     const { name, value } = e.target;
 
@@ -29,6 +35,10 @@ const Login = () => {
       [name]: value,
     }));
   };
+
+  // =====================================================
+  // HANDLE LOGIN
+  // =====================================================
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -62,13 +72,12 @@ const Login = () => {
     }
   };
 
- return (
-  <div className="relative min-h-screen w-full overflow-hidden items-center justify-end px-25 py-8">
-    {/* <div className="relative z-10 flex min-h-screen items-center justify-end px-25 py-8"> */}
+  return (
+  <div className="login-page">
 
-    {/* ================= VIDEO BACKGROUND ================= */}
+    {/* Background */}
     <video
-      className="absolute inset-0 h-full w-full object-cover"
+      className="login-background"
       autoPlay
       loop
       muted
@@ -77,184 +86,71 @@ const Login = () => {
       <source src="/login-background.mp4" type="video/mp4" />
     </video>
 
-    {/* Background overlay */}
-    <div className="absolute inset-0 bg-black/20" />
-{/* ================= LEFT SIDE BRANDING ================= */}
-<div className="absolute left-0 top-1/2 z-20 flex w-1/2 -translate-y-1/2 justify-center">
-  
-  <div className="text-center text-white">
+    <div className="login-overlay" />
 
-    {/* Logo */}
-    <div className="mb-4 flex justify-center">
-      <img
-        src="/logo.png"
-        alt="Sdaemon Infotech"
-        className="h-40 w-auto object-contain"
-      />
-    </div>
+    <div className="login-container">
 
-    {/* Company Name */}
-    <p className="text-sm font-semibold tracking-wide text-white/90">
-      Sdaemon Infotech Pvt. Ltd.
-    </p>
+      {/* LEFT BRANDING */}
+      <div className="login-branding">
 
-    {/* Portal Name */}
-    <h1 className="text-3xl font-semibold leading-tight tracking-tight">
-      E-Tender Portal
-    </h1>
+        <img
+          src="/logo.png"
+          alt="Sdaemon Infotech"
+          className="brand-logo"
+        />
 
-    {/* GeM Bids */}
-    <p className="mt-1 text-xl font-bold text-yellow-400">
-      GeM Bids Management
-    </p>
+        <p className="company-name">
+          Sdaemon Infotech Pvt. Ltd.
+        </p>
 
-  </div>
+        <h1 className="portal-title">
+          E-Tender Portal
+        </h1>
 
-</div>
+        <p className="portal-subtitle">
+          GeM Bids Management
+        </p>
+
+      </div>
 
 
-    {/* ================= RIGHT LOGIN ================= */}
-    <div
-      className="
-        relative
-        z-20
-        flex
-        min-h-screen
-        items-center
-        justify-center
-        px-5
+      {/* LOGIN FORM */}
+      <div className="login-card">
 
-        lg:justify-end
-        lg:pr-10
-
-        xl:pr-16
-      "
-    >
-
-      {/* ================= GLASS CARD ================= */}
-      <div
-  className="
-    w-full
-    max-w-md
-    rounded-3xl
-    border
-    border-white/40
-    bg-white/20
-    px-8
-    py-7
-    shadow-2xl
-    backdrop-blur-2xl
-    backdrop-saturate-150
-    animate-login-slide
-  "
->
-
-        {/* ================= LOGO ================= */}
-        <div className="mb-4 flex justify-center">
-
-          <div
-            className="
-              flex
-              h-20
-              w-20
-              items-center
-              justify-center
-
-              rounded-full
-
-              border
-              border-white/50
-
-              bg-white/25
-
-              p-3
-
-              shadow-lg
-            "
-          >
-            <img
-              src="/logo.png"
-              alt="Sdaemon"
-              className="h-full w-full object-contain"
-            />
-          </div>
-
+        <div className="login-logo-wrapper">
+          <img
+            src="/logo.png"
+            alt="Sdaemon"
+            className="login-logo"
+          />
         </div>
 
+        <div className="login-heading">
+          <h2>Welcome Back</h2>
 
-        {/* ================= TITLE ================= */}
-        <div className="mb-6 text-center">
-
-          <h2 className="text-3xl font-bold tracking-wide text-white">
-            Welcome Back
-          </h2>
-
-          <p className="mt-1.5 text-sm text-white/80">
+          <p>
             Login to your GeM BIDS account
           </p>
-
         </div>
 
-
-        {/* ================= FORM ================= */}
         <form onSubmit={handleSubmit}>
 
           {/* EMAIL */}
-          <div className="mb-4">
+          <div className="form-group">
 
-            <label className="mb-1.5 block text-sm font-semibold text-white">
-              Email
-            </label>
+            <label>Email</label>
 
-            <div className="relative">
+            <div className="input-wrapper">
 
-              <Mail
-                size={20}
-                className="
-                  absolute
-                  left-4
-                  top-1/2
-                  -translate-y-1/2
-                  text-white/75
-                "
-              />
+              <Mail className="input-icon" size={19} />
 
               <input
                 type="email"
                 name="email"
-                placeholder="Enter your email"
                 value={formData.email}
                 onChange={handleChange}
+                placeholder="Enter your email"
                 required
-                className="
-                  w-full
-                  rounded-xl
-
-                  border
-                  border-white/40
-
-                  bg-white/20
-
-                  py-3
-                  pl-11
-                  pr-4
-
-                  text-sm
-                  text-white
-
-                  placeholder-white/60
-
-                  outline-none
-
-                  backdrop-blur-md
-
-                  transition-all
-
-                  focus:border-white
-                  focus:bg-white/30
-                  focus:ring-2
-                  focus:ring-white/20
-                "
               />
 
             </div>
@@ -263,79 +159,34 @@ const Login = () => {
 
 
           {/* PASSWORD */}
-          <div className="mb-5">
+          <div className="form-group">
 
-            <label className="mb-1.5 block text-sm font-semibold text-white">
-              Password
-            </label>
+            <label>Password</label>
 
-            <div className="relative">
+            <div className="input-wrapper">
 
-              <Lock
-                size={20}
-                className="
-                  absolute
-                  left-4
-                  top-1/2
-                  -translate-y-1/2
-                  text-white/75
-                "
-              />
+              <Lock className="input-icon" size={19} />
 
               <input
                 type={showPassword ? "text" : "password"}
                 name="password"
-                placeholder="Enter your password"
                 value={formData.password}
                 onChange={handleChange}
+                placeholder="Enter your password"
                 required
-                className="
-                  w-full
-                  rounded-xl
-
-                  border
-                  border-white/40
-
-                  bg-white/20
-
-                  py-3
-                  pl-11
-                  pr-12
-
-                  text-sm
-                  text-white
-
-                  placeholder-white/60
-
-                  outline-none
-
-                  backdrop-blur-md
-
-                  transition-all
-
-                  focus:border-white
-                  focus:bg-white/30
-                  focus:ring-2
-                  focus:ring-white/20
-                "
               />
 
               <button
                 type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="
-                  absolute
-                  right-4
-                  top-1/2
-                  -translate-y-1/2
-                  text-white/75
-                  hover:text-white
-                "
+                className="password-button"
+                onClick={() =>
+                  setShowPassword(!showPassword)
+                }
               >
                 {showPassword ? (
-                  <EyeOff size={20} />
+                  <EyeOff size={19} />
                 ) : (
-                  <Eye size={20} />
+                  <Eye size={19} />
                 )}
               </button>
 
@@ -346,19 +197,7 @@ const Login = () => {
 
           {/* ERROR */}
           {error && (
-            <div
-              className="
-                mb-4
-                rounded-lg
-                border
-                border-red-300/30
-                bg-red-500/20
-                px-3
-                py-2
-                text-sm
-                text-red-100
-              "
-            >
+            <div className="login-error">
               {error}
             </div>
           )}
@@ -367,94 +206,30 @@ const Login = () => {
           {/* LOGIN BUTTON */}
           <button
             type="submit"
+            className="login-button"
             disabled={loading}
-            className="
-              group
-              relative
-              flex
-              w-full
-              items-center
-              justify-center
-              gap-2
-
-              overflow-hidden
-              rounded-xl
-
-              bg-gradient-to-r
-              from-blue-500
-              to-blue-700
-
-              py-3
-
-              text-base
-              font-semibold
-              text-white
-
-              shadow-lg
-
-              transition-all
-              duration-300
-
-              hover:-translate-y-0.5
-              hover:shadow-xl
-              hover:shadow-blue-500/30
-
-              disabled:cursor-not-allowed
-              disabled:opacity-60
-            "
           >
-
-            <span className="relative z-10">
-              {loading ? "Logging in..." : "Login"}
-            </span>
-
-            {!loading && (
-              <ArrowRight
-                size={19}
-                className="
-                  relative
-                  z-10
-                  transition-transform
-                  duration-300
-                  group-hover:translate-x-1
-                "
-              />
+            {loading ? (
+              "Logging in..."
+            ) : (
+              <>
+                Login
+                <ArrowRight size={19} />
+              </>
             )}
-
-            {/* Button shine */}
-            <span
-              className="
-                absolute
-                inset-y-0
-                -left-20
-                w-16
-                rotate-12
-                bg-white/40
-                blur-md
-
-                transition-all
-                duration-700
-
-                group-hover:left-[120%]
-              "
-            />
-
           </button>
 
         </form>
 
-
-        {/* ================= FOOTER ================= */}
-        <div className="mt-5 text-center">
-
+        <div className="login-footer">
          
         </div>
 
       </div>
 
     </div>
-</div>
-  // </div>
+
+  </div>
 );
 };
 
