@@ -1,10 +1,14 @@
-import { useEffect } from "react";
-import { useParams, useNavigate,useLocation  } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
+import { FiFileText, FiDownload, FiExternalLink } from "react-icons/fi";
+import { saveAs } from "file-saver";
 
 import { useAppDispatch, useAppSelector } from "../hooks/reduxHooks";
 
 import { loadBidDetail } from "../features/bids/bidThunk";
 import { clearSelectedBid } from "../features/bids/bidSlice";
+import { getBidPdfUrl, fetchBidPdfBlob } from "../api/bidApi";
+import BidPdfViewerModal from "../components/Bid/BidPdfViewerModal";
 
 import {
   selectSelectedBid,
@@ -33,9 +37,29 @@ const BidDetailsPage = () => {
 
   const selectedBid = useAppSelector(selectSelectedBid);
 
-const bid = bidFromTable || selectedBid;
+  const bid = bidFromTable || selectedBid;
   const loading = useAppSelector(selectBidDetailLoading);
   const error = useAppSelector(selectBidDetailError);
+
+  const [showPdfModal, setShowPdfModal] = useState(false);
+  const [downloadingPdf, setDownloadingPdf] = useState(false);
+
+  const handleDownloadPdf = async () => {
+    const targetBidNumber = bid?.bidNumber || bidNumber;
+    if (!targetBidNumber) return;
+
+    try {
+      setDownloadingPdf(true);
+      const blob = await fetchBidPdfBlob(targetBidNumber);
+      const safeName = `${targetBidNumber.replace(/[\/\\]/g, "_")}.pdf`;
+      saveAs(blob, safeName);
+    } catch (err) {
+      console.error("Direct PDF download failed, using browser download:", err);
+      window.open(getBidPdfUrl(targetBidNumber, true), "_blank");
+    } finally {
+      setDownloadingPdf(false);
+    }
+  };
 
   useEffect(() => {
   if (!bidFromTable && bidNumber) {
@@ -79,22 +103,24 @@ const bid = bidFromTable || selectedBid;
   const rows = [
   {
     label: "Bid No",
-    value: bid.bidNumber,
+    value: bid.bidNumber || "-",
   },
 
   {
     label: "Department",
-    value: bid.departmentName,
+    value: bid.departmentName || "N/A",
   },
 
   {
     label: "Organization",
-    value: bid.organisationName,
+    value: bid.organisationName || "N/A",
   },
 
    {
     label: "Location",
-    value: bid.location,
+    value: bid.location && !bid.location.includes("|") && !bid.location.includes("Supplier")
+      ? bid.location
+      : (bid.officeName && !bid.officeName.includes("|") ? bid.officeName : "-"),
   },
   {
     label: "Category",
@@ -164,22 +190,51 @@ const bid = bidFromTable || selectedBid;
             ))}
           </div>
 
-          {/* ================= PDF ================= */}
-
-          {bid.pdfUrl && (
-            <div className="mt-2">
-              <a
-                href={bid.pdfUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn btn-primary"
+          {/* ================= PDF ACTIONS ================= */}
+          <div className="mt-4 pt-3 border-top">
+            <h6 className="fw-bold mb-3 text-dark">Tender Documents</h6>
+            <div className="d-flex flex-wrap gap-2">
+              <button
+                type="button"
+                className="btn btn-primary d-flex align-items-center gap-2"
+                onClick={() => setShowPdfModal(true)}
               >
-                Download Document
-              </a>
+                <FiFileText size={18} />
+                <span>View Tender Document (PDF)</span>
+              </button>
+
+              <button
+                type="button"
+                className="btn btn-outline-success d-flex align-items-center gap-2"
+                onClick={handleDownloadPdf}
+                disabled={downloadingPdf}
+              >
+                <FiDownload size={18} />
+                <span>{downloadingPdf ? "Downloading PDF..." : "Download PDF"}</span>
+              </button>
+
+              {bid.pdfUrl && (
+                <a
+                  href={bid.pdfUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn btn-outline-secondary d-flex align-items-center gap-2"
+                >
+                  <FiExternalLink size={16} />
+                  <span>GeM Portal Link</span>
+                </a>
+              )}
             </div>
-          )}
+          </div>
         </div>
       </div>
+
+      <BidPdfViewerModal
+        isOpen={showPdfModal}
+        onClose={() => setShowPdfModal(false)}
+        bidNumber={bid.bidNumber || bidNumber}
+        directPdfUrl={bid.pdfUrl}
+      />
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import axiosInstance from "./axiosInstance";
+import axiosInstance, { API_URL } from "./axiosInstance";
 import { API_ENDPOINTS } from "../constants/apiEndpoints";
 
 // Returns PagedResponseDto { pageNumber, pageSize, totalRecords, totalPages, data, filters }
@@ -16,9 +16,6 @@ export const fetchBidDetail = async (bidNumber) => {
   return response.data;
 };
 
-
-
-
 // <--Export bids to Excel by Atharv-->
 export const exportBids = async (filters) => {
     const response = await axiosInstance.get(
@@ -30,4 +27,17 @@ export const exportBids = async (filters) => {
     );
 
     return response;
+};
+
+// Returns direct URL to stream or download PDF from proxy endpoint
+export const getBidPdfUrl = (bidNumber, download = false) => {
+  return `${API_URL}${API_ENDPOINTS.BID_PDF(bidNumber, download)}`;
+};
+
+// Fetches PDF as blob for direct download or in-app preview
+export const fetchBidPdfBlob = async (bidNumber) => {
+  const response = await axiosInstance.get(API_ENDPOINTS.BID_PDF(bidNumber), {
+    responseType: "blob",
+  });
+  return response.data;
 };

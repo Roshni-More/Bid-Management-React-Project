@@ -41,7 +41,7 @@ const ExportExcelButton = ({ filters }) => {
     return (
         <button
             type="button"
-            className="btn btn-outline-success btn-sm"
+            className="btn btn-outline-success btn-sm d-inline-flex align-items-center text-nowrap"
             onClick={handleExport}
             disabled={exporting}
             title="Export filtered bids to Excel"

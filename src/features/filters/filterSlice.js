@@ -18,6 +18,9 @@ const initialSelected = {
   Active: true,
   ClosingSoon: undefined,
   Expired: undefined,
+  Weekly: undefined,
+  Monthly: undefined,
+  Yearly: undefined,
   BidDateFrom: undefined,
   BidDateTo: undefined,
   ClosingDateFrom: undefined,
@@ -113,6 +116,9 @@ const filterSlice = createSlice({
       state.selected.Active = action.payload.active;
       state.selected.ClosingSoon = action.payload.closingSoon;
       state.selected.Expired = action.payload.expired;
+      state.selected.Weekly = action.payload.weekly;
+      state.selected.Monthly = action.payload.monthly;
+      state.selected.Yearly = action.payload.yearly;
       state.selected.PageNumber = DEFAULT_PAGE_NUMBER;
     },
     syncOptionsFromBidResponse: (state, action) => {

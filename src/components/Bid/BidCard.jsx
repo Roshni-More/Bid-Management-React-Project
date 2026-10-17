@@ -1,4 +1,6 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { FaFilePdf } from "react-icons/fa";
 
 import {
   formatDate,
@@ -6,9 +8,11 @@ import {
 } from "../../utils/formatters";
 
 import BidStatus from "./BidStatus";
+import BidPdfViewerModal from "./BidPdfViewerModal";
 
 const BidCard = ({ bid }) => {
   const navigate = useNavigate();
+  const [showPdfModal, setShowPdfModal] = useState(false);
 
   // Use the SAME status logic as BidTable
   const status = getBidStatus(bid);
@@ -186,7 +190,44 @@ const BidCard = ({ bid }) => {
 
         </div>
 
+        {/* Card Actions Footer */}
+        <div className="d-flex justify-content-between align-items-center mt-2 pt-2 border-top">
+          <button
+            type="button"
+            className="btn btn-sm btn-outline-danger d-flex align-items-center gap-1 py-1 px-2"
+            style={{ fontSize: "11px" }}
+            onClick={(e) => {
+              e.stopPropagation();
+              setShowPdfModal(true);
+            }}
+            title="View Tender PDF Document"
+          >
+            <FaFilePdf size={12} />
+            <span>View PDF</span>
+          </button>
+
+          <button
+            type="button"
+            className="btn btn-sm btn-outline-primary d-flex align-items-center gap-1 py-1 px-2"
+            style={{ fontSize: "11px" }}
+            onClick={(e) => {
+              e.stopPropagation();
+              navigate(`/details/${bid.bidNumber}`);
+            }}
+            title="View Details"
+          >
+            <span>Details →</span>
+          </button>
+        </div>
+
       </div>
+
+      <BidPdfViewerModal
+        isOpen={showPdfModal}
+        onClose={() => setShowPdfModal(false)}
+        bidNumber={bid.bidNumber}
+        directPdfUrl={bid.pdfUrl}
+      />
     </div>
   );
 };

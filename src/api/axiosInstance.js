@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL =
+export const API_URL =
   window.location.hostname === "localhost"
     ? "https://localhost:7296"
     : "https://gemsbidapi.sdaemon.com";

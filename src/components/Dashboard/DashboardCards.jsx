@@ -37,7 +37,7 @@ const DashboardCards = () => {
     dispatch(setStatusFilter(payload));
     dispatch(setPage(1));
     dispatch(loadBidList());
-    dispatch(loadDashboardStats());
+    
   };
 
   const cards = [
@@ -46,18 +46,24 @@ const DashboardCards = () => {
       value: weeklyTotal,
       color: "#06b6d4",
       icon: <FaCalendarWeek />,
+      active: !!selected.Weekly,
+      payload: { weekly: true },
     },
     {
       title: "Monthly",
       value: monthlyTotal,
       color: "#7c3aed",
       icon: <FaCalendarAlt />,
+      active: !!selected.Monthly,
+      payload: { monthly: true },
     },
     {
       title: "Yearly",
       value: yearlyTotal,
       color: "#374151",
       icon: <FaCalendar />,
+      active: !!selected.Yearly,
+      payload: { yearly: true },
     },
     {
       title: "All Bids",
@@ -67,7 +73,10 @@ const DashboardCards = () => {
       active:
         !selected.Active &&
         !selected.ClosingSoon &&
-        !selected.Expired,
+        !selected.Expired &&
+        !selected.Weekly &&
+        !selected.Monthly &&
+        !selected.Yearly,
       payload: {},
     },
     {
@@ -75,7 +84,12 @@ const DashboardCards = () => {
       value: stats.activeBids ?? 0,
       color: "#22c55e",
       icon: <FaCheckCircle />,
-      active: !!selected.Active,
+      active:
+        !!selected.Active &&
+        !selected.ClosingSoon &&
+        !selected.Weekly &&
+        !selected.Monthly &&
+        !selected.Yearly,
       payload: { active: true },
     },
     {

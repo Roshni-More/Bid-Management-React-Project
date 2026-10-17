@@ -74,7 +74,7 @@ const BidTable = () => {
     {
       header: "Department",
       accessor: (row) => {
-        const value = row.departmentName || "";
+        const value = row.departmentName || "N/A";
 
         const words = value.trim().split(/\s+/);
 
@@ -90,7 +90,7 @@ const BidTable = () => {
     {
       header: "Organisation",
       accessor: (row) => {
-        const value = row.organisationName || "";
+        const value = row.organisationName || "N/A";
 
         const words = value.trim().split(/\s+/);
 
@@ -103,21 +103,24 @@ const BidTable = () => {
     },
 
     {
-  header: "Location",
-  accessor: (row) => {
-    const value = row.location ||row.consigneeName|| "-";
+      header: "Location",
+      accessor: (row) => {
+        const raw = row.location || "-";
+        const value = raw.includes("|") || raw.includes("Supplier")
+          ? (row.officeName && !row.officeName.includes("|") ? row.officeName : "-")
+          : raw;
 
-    const words = value.trim().split(/\s+/);
+        const words = value.trim().split(/\s+/);
 
-    return (
-      <span title={value}>
-        {words.length > 4
-          ? `${words.slice(0, 4).join(" ")}...`
-          : value}
-      </span>
-    );
-  },
-},
+        return (
+          <span title={value}>
+            {words.length > 4
+              ? `${words.slice(0, 4).join(" ")}...`
+              : value}
+          </span>
+        );
+      },
+    },
 
     {
       header: "Category",
