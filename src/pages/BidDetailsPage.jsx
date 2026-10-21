@@ -1,13 +1,11 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
-import { FiFileText, FiDownload, FiExternalLink } from "react-icons/fi";
-import { saveAs } from "file-saver";
+import { FiFileText } from "react-icons/fi";
 
 import { useAppDispatch, useAppSelector } from "../hooks/reduxHooks";
 
 import { loadBidDetail } from "../features/bids/bidThunk";
 import { clearSelectedBid } from "../features/bids/bidSlice";
-import { getBidPdfUrl, fetchBidPdfBlob } from "../api/bidApi";
 import BidPdfViewerModal from "../components/Bid/BidPdfViewerModal";
 
 import {
@@ -42,24 +40,6 @@ const BidDetailsPage = () => {
   const error = useAppSelector(selectBidDetailError);
 
   const [showPdfModal, setShowPdfModal] = useState(false);
-  const [downloadingPdf, setDownloadingPdf] = useState(false);
-
-  const handleDownloadPdf = async () => {
-    const targetBidNumber = bid?.bidNumber || bidNumber;
-    if (!targetBidNumber) return;
-
-    try {
-      setDownloadingPdf(true);
-      const blob = await fetchBidPdfBlob(targetBidNumber);
-      const safeName = `${targetBidNumber.replace(/[\/\\]/g, "_")}.pdf`;
-      saveAs(blob, safeName);
-    } catch (err) {
-      console.error("Direct PDF download failed, using browser download:", err);
-      window.open(getBidPdfUrl(targetBidNumber, true), "_blank");
-    } finally {
-      setDownloadingPdf(false);
-    }
-  };
 
   useEffect(() => {
   if (!bidFromTable && bidNumber) {
@@ -202,28 +182,6 @@ const BidDetailsPage = () => {
                 <FiFileText size={18} />
                 <span>View Tender Document (PDF)</span>
               </button>
-
-              <button
-                type="button"
-                className="btn btn-outline-success d-flex align-items-center gap-2"
-                onClick={handleDownloadPdf}
-                disabled={downloadingPdf}
-              >
-                <FiDownload size={18} />
-                <span>{downloadingPdf ? "Downloading PDF..." : "Download PDF"}</span>
-              </button>
-
-              {bid.pdfUrl && (
-                <a
-                  href={bid.pdfUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn btn-outline-secondary d-flex align-items-center gap-2"
-                >
-                  <FiExternalLink size={16} />
-                  <span>GeM Portal Link</span>
-                </a>
-              )}
             </div>
           </div>
         </div>

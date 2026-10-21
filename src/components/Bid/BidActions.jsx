@@ -1,17 +1,14 @@
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FiEye } from "react-icons/fi";
-import { FaFileExcel, FaFilePdf } from "react-icons/fa";
+import { FaFileExcel } from "react-icons/fa";
 
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 
 import { getBidStatus, formatDate } from "../../utils/formatters";
-import BidPdfViewerModal from "./BidPdfViewerModal";
 
 const BidActions = ({ bid }) => {
   const navigate = useNavigate();
-  const [showPdfModal, setShowPdfModal] = useState(false);
 
   const downloadExcel = () => {
     const excelData = [
@@ -46,47 +43,31 @@ const BidActions = ({ bid }) => {
   };
 
   return (
-    <>
-      <div className="d-flex gap-2">
-        <button
-          className="btn btn-sm btn-outline-danger"
-          onClick={() => setShowPdfModal(true)}
-          title="View Tender PDF Document"
-        >
-          <FaFilePdf />
-        </button>
+    <div className="d-flex gap-2">
+      <button
+        className="btn btn-sm btn-outline-primary"
+        onClick={() =>
+          navigate(`/details/${bid.bidNumber}`, {
+            state: {
+              bid: bid,
+            },
+          })
+        }
+        title="View Details"
+      >
+        <FiEye />
+      </button>
 
-        <button
-          className="btn btn-sm btn-outline-primary"
-          onClick={() =>
-            navigate(`/details/${bid.bidNumber}`, {
-              state: {
-                bid: bid,
-              },
-            })
-          }
-          title="View Details"
-        >
-          <FiEye />
-        </button>
-
-        <button
-          className="btn btn-sm btn-outline-success"
-          onClick={downloadExcel}
-          title="Download Excel"
-        >
-          <FaFileExcel />
-        </button>
-      </div>
-
-      <BidPdfViewerModal
-        isOpen={showPdfModal}
-        onClose={() => setShowPdfModal(false)}
-        bidNumber={bid.bidNumber}
-        directPdfUrl={bid.pdfUrl}
-      />
-    </>
+      <button
+        className="btn btn-sm btn-outline-success"
+        onClick={downloadExcel}
+        title="Download Excel"
+      >
+        <FaFileExcel />
+      </button>
+    </div>
   );
 };
 
 export default BidActions;
+
